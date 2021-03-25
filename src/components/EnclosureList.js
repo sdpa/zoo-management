@@ -17,6 +17,8 @@ import Lion from "../images/Lion.jpg";
 import Rhinoceros from "../images/Rhinoceros.jpg";
 import Tiger from "../images/Tiger.jpg";
 
+import Navbar from './Navbar';
+
 const enclosure_data = [
   {
     enclosureName: "Elepant",
@@ -112,6 +114,9 @@ const EnclosureList = () => {
   const classes = useStyles();
   return (
     <div className={classes.categoryContainer}>
+
+      <Navbar></Navbar>
+
       <Divider className={classes.divider}></Divider>
       <Typography className={classes.listCategory}>Enclosures</Typography>
       <Grid direction="row" container spacing={2}>
