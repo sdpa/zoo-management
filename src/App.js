@@ -3,6 +3,8 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Home from "./Home";
 import Ticket from "./components/Ticket"; 
 import EnclosureList from "./components/EnclosureList";
+import CreateUser from "./components/CreateUser";
+import UserLogin from "./components/UserLogin";
 
 
 // NEED TO "npm install" @material-ui dependencies 
@@ -19,6 +21,8 @@ function App() {
           <Route exact path="/" component={Home}/>
           <Route exact path="/ticket" component={Ticket}/>
           <Route exact path="/enclosure" component={EnclosureList}/>
+          <Route exact path="/create" component={CreateUser}/>
+          <Route exact path="/login" component={UserLogin}/>
         </Switch>
       </BrowserRouter>
     </div>
