@@ -5,7 +5,7 @@ function CreateUser() {
     return (
         <div>
           <h3>Create User</h3>
-          <form onSubmit={handleSubmit}>
+          <form>
             <div className="form-group">
               <label>Username: </label>
               <input
