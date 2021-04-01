@@ -22,7 +22,8 @@ const useStyles = makeStyles((theme) => ({}));
 
 const EnclosureDetailed = ({ match }) => {
   const classes = useStyles();
-  //Get all animals that live in the same enclosure.
+  //Get animals in the Enclosure.
+
   return (
     <>
       {loading ? (
