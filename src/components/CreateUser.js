@@ -1,9 +1,13 @@
 import React, { Component } from 'react'
 
+import Navbar from './Navbar';
 
 function CreateUser() {
     return (
         <div>
+          
+          <Navbar/>
+
           <h3>Create User</h3>
           <form>
             <div className="form-group">

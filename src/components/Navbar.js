@@ -1,4 +1,4 @@
-import React, { useState } from "react"; 
+import React, { useContext } from "react"; 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -7,28 +7,36 @@ import HomeIcon from '@material-ui/icons/Home';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Button from "@material-ui/core/Button";
 import { useHistory } from "react-router-dom";
+import { UserContext } from "./UserContext";
 
 
 // styling should change a little bit
 function Navbar() {
 
-  // this should be changed so loggedIn status is consistent throughout all pages
-  const [loggedIn, setLoggedIn] = useState(false); 
+  const { user, login, logout } = useContext(UserContext); 
 
   const history = useHistory();
 
-  const goBackToHomePage = () =>{ 
+  const goBackToHomePage = () => { 
     let path = '/'; 
     history.push(path);
   }
 
+  const goToLogInPage = () => {
+    let path = '/login';
+    history.push(path); 
+  }
 
-  // needs to go to account page when it's created. 
+  const goToSignUpPage = () => {
+    let path = '/create';
+    history.push(path); 
+  }
+
+  // needs to go to account page/purchase history when it's created. 
   const goToAccountPage = () => {
     let path ='/';
     history.push(path); 
   }
-
 
   return(
     <div>
@@ -43,23 +51,37 @@ function Navbar() {
         
 
 
-         {/* this needs to change! log in should redirect to another page   */}
+         {/* this needs to change! "login(customer)" should go to UserLogin.js later   */}
         {
-          !loggedIn && (
-            <Button onClick={() => {setLoggedIn(!loggedIn)}}>
-              Log in
-            </Button>
+          !user.auth && (
+            <div>
+              <Button>
+                Welcome, guest
+              </Button>
+              <Button onClick={() => {
+                login("customer")
+                goToLogInPage(); 
+                }}>
+                Log in
+              </Button>
+              <Button onClick={goToSignUpPage}>
+                Sign up
+              </Button>
+            </div>
           )
         }
 
         { 
-          loggedIn && (
+          user.auth && (
             <div>
+              <Button>
+                Welcome, {user.name}
+              </Button>
               <IconButton edge="start" color="inherit" aria-label="menu" onClick={goToAccountPage}>
                 <AccountCircleIcon/>
               </IconButton>
 
-              <Button onClick={() => {setLoggedIn(!loggedIn)}}>
+              <Button onClick={logout}>
                 Sign out
               </Button>
             </div>

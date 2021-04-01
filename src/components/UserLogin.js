@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 
+import Navbar from './Navbar';
+
 function UserLogin() {
 
   return (
     <div>
+      <Navbar/>
+      
       <h3>Log In</h3>
       <form>
         <div className="form-group">

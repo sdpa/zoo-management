@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import { makeStyles } from "@material-ui/core/styles";
@@ -121,7 +121,7 @@ const EnclosureList = () => {
     axios
       .get("enclosures/")
       .then((res) => {
-        consle.log(res);
+        console.log(res);
       })
       .catch((err) => {
         console.log(err);
@@ -152,7 +152,7 @@ const EnclosureList = () => {
           );
         })}
       </Grid>
-      <Button onClick={createEnclosure}>Create Enclosure</Button>
+      {/* <Button onClick={createEnclosure}>Create Enclosure</Button> */}
     </div>
   );
 };
