@@ -8,15 +8,20 @@ import {
   FormControl,
   Input,
   Grid,
+  FormHelperText,
 } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
 import { base_url } from "../config";
+import { useFormik } from "formik";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
   select: {
     minWidth: 150,
+  },
+  errMessage: {
+    color: "red",
   },
 });
 
@@ -39,13 +44,6 @@ const EmployeeDashboard = () => {
     axios
       .get(`${base_url}/enclosures`)
       .then((res) => {
-        // console.log(res);
-        // const with_image = res.data.map((e) => {
-        //   return {
-        //     ...e,
-        //     location_img: URL.createObjectURL(new Blob(e.image.data, {type: "application/zip"}),
-        //   };
-        // });
         console.log(res.data);
         let names = res.data.map((e) => {
           return e.location_name;
@@ -61,13 +59,6 @@ const EmployeeDashboard = () => {
     axios
       .get(`${base_url}/species`)
       .then((res) => {
-        // console.log(res);
-        // const with_image = res.data.map((e) => {
-        //   return {
-        //     ...e,
-        //     location_img: URL.createObjectURL(new Blob(e.image.data, {type: "application/zip"}),
-        //   };
-        // });
         console.log(res.data);
         setSpecies(res.data);
       })
@@ -81,16 +72,37 @@ const EmployeeDashboard = () => {
     getAllSpecies();
   }, []);
 
-  const handleAnimalChange = (e) => {
-    setAnimal({
-      ...animal,
-      [e.target.name]: e.target.value,
-    });
+  const validate = (values) => {
+    let errors = {};
+    if (!values.animal_name) {
+      errors.animal_name = "Required";
+    }
+    if (!values.location) {
+      errors.location = "Required";
+    }
+    if (!values.date_arrived) {
+      errors.date_arrived = "Required";
+    }
+    if (!values.birth_day) {
+      errors.birth_day = "Required";
+    }
+    if (!values.species) {
+      errors.species = "Required";
+    }
+    return errors;
   };
 
-  const createAnimal = () => {
+  const handleSubmit = (values) => {
+    console.log("handleSubmit called");
     axios
-      .post(`${base_url}/animals`, animal)
+      .post(`${base_url}/animals`, {
+        date_arrived: values.date_arrived,
+        deceased_date: values.deceased_date,
+        birth_day: values.birth_day,
+        location: values.location,
+        animal_name: values.animal_name,
+        species: values.species,
+      })
       .then((res) => {
         console.log(res);
       })
@@ -99,6 +111,21 @@ const EmployeeDashboard = () => {
       });
   };
 
+  const formik = useFormik({
+    initialValues: {
+      date_arrived: "",
+      deceased_date: null,
+      birth_day: "",
+      location: "",
+      animal_name: "",
+      species: "",
+    },
+    validate,
+    onSubmit: (values) => {
+      handleSubmit(values);
+    },
+  });
+
   return (
     <form className="form">
       <Typography>Add Animal to Zoo</Typography>
@@ -106,7 +133,15 @@ const EmployeeDashboard = () => {
         <Grid item>
           <FormControl>
             <InputLabel htmlFor="name">Name</InputLabel>
-            <Input id="name" onChange={handleAnimalChange} name="animal_name" />
+            <Input
+              id="name"
+              onChange={formik.handleChange}
+              name="animal_name"
+              error={formik.errors.animal_name}
+            />
+            <FormHelperText className={classes.errMessage}>
+              {formik.errors.animal_name}
+            </FormHelperText>
           </FormControl>
         </Grid>
         <Grid item>
@@ -114,8 +149,9 @@ const EmployeeDashboard = () => {
             <InputLabel id="enclosureName">Enclosure Name</InputLabel>
             <Select
               labelId="enclosureName"
-              onChange={handleAnimalChange}
+              onChange={formik.handleChange}
               name="location"
+              error={formik.errors.location}
               className={classes.select}>
               {enclosureNames.map((name) => (
                 <MenuItem key={name} value={name}>
@@ -123,6 +159,9 @@ const EmployeeDashboard = () => {
                 </MenuItem>
               ))}
             </Select>
+            <FormHelperText className={classes.errMessage}>
+              {formik.errors.location}
+            </FormHelperText>
           </FormControl>
         </Grid>
         <Grid item>
@@ -130,8 +169,9 @@ const EmployeeDashboard = () => {
             <InputLabel id="species">Species</InputLabel>
             <Select
               labelId="species"
-              onChange={handleAnimalChange}
+              onChange={formik.handleChange}
               name="species"
+              error={formik.errors.species}
               className={classes.select}>
               {species.map((s, index) => (
                 <MenuItem key={index} value={s.species_id}>
@@ -139,6 +179,9 @@ const EmployeeDashboard = () => {
                 </MenuItem>
               ))}
             </Select>
+            <FormHelperText className={classes.errMessage}>
+              {formik.errors.species}
+            </FormHelperText>
           </FormControl>
         </Grid>
         <Grid item>
@@ -149,9 +192,13 @@ const EmployeeDashboard = () => {
             <Input
               labelId="dob"
               type="date"
-              onChange={handleAnimalChange}
+              onChange={formik.handleChange}
+              error={formik.errors.birth_day}
               name="birth_day"
             />
+            <FormHelperText className={classes.errMessage}>
+              {formik.errors.birth_day}
+            </FormHelperText>
           </FormControl>
         </Grid>
         <Grid item>
@@ -163,13 +210,20 @@ const EmployeeDashboard = () => {
               labelId="dob"
               type="date"
               defaultValue={new Date().toDateString()}
-              onChange={handleAnimalChange}
+              onChange={formik.handleChange}
+              error={formik.errors.date_arrived}
               name="date_arrived"
             />
+            <FormHelperText className={classes.errMessage}>
+              {formik.errors.date_arrived}
+            </FormHelperText>
           </FormControl>
         </Grid>
         <Grid item>
-          <Button variant="outlined" onClick={createAnimal}>
+          <Button
+            variant="outlined"
+            onClick={formik.handleSubmit}
+            type="submit">
             Add Animal
           </Button>
         </Grid>
