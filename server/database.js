@@ -1,4 +1,4 @@
-import mysql from "mysql";
+const mysql = require("mysql");
 
 //Initialize sql connection.
 const db = mysql.createConnection({
@@ -8,12 +8,12 @@ const db = mysql.createConnection({
   database: "zoo_db",
 });
 
-// db.connect((err) => {
-//   if (err) {
-//     throw err;
-//   } else {
-//     console.log("Connected to database");
-//   }
-// });
+db.connect((err) => {
+  if (err) {
+    throw err;
+  } else {
+    console.log("Connected to database");
+  }
+});
 
-export default db;
+module.exports = db;

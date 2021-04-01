@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import { makeStyles } from "@material-ui/core/styles";
@@ -16,10 +16,12 @@ import Giraffe from "../images/Giraffe.jpg";
 import Lion from "../images/Lion.jpg";
 import Rhinoceros from "../images/Rhinoceros.jpg";
 import Tiger from "../images/Tiger.jpg";
-
-import Navbar from "./Navbar";
+import The_Safari from "../images/The_Safari.jpg";
 
 import axios from "axios";
+import { base_url } from "../config";
+import { TextField } from "@material-ui/core";
+import { images_path } from "../config";
 
 const enclosure_data = [
   {
@@ -67,7 +69,7 @@ const useStyles = makeStyles({
 const cardStyles = makeStyles({
   root: {
     width: "280px",
-    height: "300px",
+    // height: "300px",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
@@ -115,13 +117,21 @@ const EnclosureCard = ({ name, description, image }) => {
 const EnclosureList = () => {
   const classes = useStyles();
 
-  const [enclosure, setEnclosure] = useState("");
+  const [enclosures, setEnclosures] = useState([]);
 
   const getAllEnclosures = () => {
     axios
-      .get("enclosures/")
+      .get(`${base_url}/enclosures`)
       .then((res) => {
-        consle.log(res);
+        // console.log(res);
+        // const with_image = res.data.map((e) => {
+        //   return {
+        //     ...e,
+        //     location_img: URL.createObjectURL(new Blob(e.image.data, {type: "application/zip"}),
+        //   };
+        // });
+        console.log(res.data);
+        setEnclosures(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -135,24 +145,28 @@ const EnclosureList = () => {
 
   return (
     <div className={classes.categoryContainer}>
-      <Navbar></Navbar>
+      {/* <Navbar></Navbar> */}
 
       <Divider className={classes.divider}></Divider>
       <Typography className={classes.listCategory}>Enclosures</Typography>
       <Grid direction="row" container spacing={2}>
-        {enclosure_data.map((enclosure, i) => {
+        {enclosures.map((enclosure, i) => {
           return (
             <Grid item key={i}>
               <EnclosureCard
-                name={enclosure.enclosureName}
-                description={enclosure.description}
-                image={enclosure.img}
+                name={enclosure.location_name}
+                image={`/uploads/${enclosure.location_image}`}
               />
             </Grid>
           );
         })}
       </Grid>
-      <Button onClick={createEnclosure}>Create Enclosure</Button>
+      <TextField variant="outlined">Location Name</TextField>
+      <Button variant="contained">
+        Upload Image
+        <input type="file" hidden />
+      </Button>
+      <Button>Create Enclosure</Button>
     </div>
   );
 };
