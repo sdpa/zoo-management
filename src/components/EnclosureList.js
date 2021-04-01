@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import { makeStyles } from "@material-ui/core/styles";
@@ -18,7 +18,8 @@ import Rhinoceros from "../images/Rhinoceros.jpg";
 import Tiger from "../images/Tiger.jpg";
 
 import Navbar from "./Navbar";
-import db from "../database";
+
+import axios from "axios";
 
 const enclosure_data = [
   {
@@ -77,27 +78,6 @@ const cardStyles = makeStyles({
 });
 
 const EnclosureCard = ({ name, description, image }) => {
-  const createEnclosure = () => {
-    //Object to insert
-    let location = {
-      location_type: body.location_type,
-      location_name: body.location_name,
-    };
-
-    // Create the query
-    let sql = `INSERT INTO locations SET ?`;
-
-    //Make the query to database.
-    db.connect((err) => {
-      if (err) throw err;
-      db.query(sql, location, (error, result) => {
-        if (error) throw error;
-        console.log(result);
-        db.end();
-      });
-    });
-  };
-
   const classes = cardStyles();
 
   return (
@@ -134,6 +114,25 @@ const EnclosureCard = ({ name, description, image }) => {
 
 const EnclosureList = () => {
   const classes = useStyles();
+
+  const [enclosure, setEnclosure] = useState("");
+
+  const getAllEnclosures = () => {
+    axios
+      .get("enclosures/")
+      .then((res) => {
+        consle.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    getAllEnclosures();
+    // console.log(enclosures);
+  }, []);
+
   return (
     <div className={classes.categoryContainer}>
       <Navbar></Navbar>

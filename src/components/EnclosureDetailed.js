@@ -18,19 +18,18 @@ import {
 
 import SaveIcon from "@material-ui/icons/Save";
 
-const useStyles = makeStyles((theme) => ({
-  
-}));
+const useStyles = makeStyles((theme) => ({}));
 
 const EnclosureDetailed = ({ match }) => {
   const classes = useStyles();
-  //Get all animals that live in the same enclosure. 
+  //Get all animals that live in the same enclosure.
   return (
     <>
       {loading ? (
         <LinearProgress color="secondary" />
       ) : (
-        //List of all animals in this Enclosure. 
+        //List of all animals in this Enclosure.
+        <Typography>Enclosure Detailed</Typography>
       )}
     </>
   );
