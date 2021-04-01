@@ -5,7 +5,7 @@ function UserLogin() {
   return (
     <div>
       <h3>Log In</h3>
-      <form onSubmit={handleSubmit}>
+      <form>
         <div className="form-group">
           <label>Username: </label>
           <input
