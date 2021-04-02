@@ -11,7 +11,7 @@ router.post("/", (req, res, next) => {
     date_arrived: body.date_arrived,
     deceased_date: body.deceased_date,
     birth_day: body.birth_day,
-    location: body.location,
+    location_id: body.location,
     animal_name: body.animal_name,
   };
 
@@ -21,6 +21,30 @@ router.post("/", (req, res, next) => {
 
   let response = {};
   db.query(sql, animal, (error, result) => {
+    if (error) throw error;
+    response = JSON.parse(JSON.stringify(result));
+    return res.send(response);
+  });
+  //   return res.send(200);
+});
+
+//Get All animals.
+router.get("/all", (req, res, next) => {
+  let sql = "SELECT * FROM animals";
+  db.query(sql, (error, result) => {
+    if (error) throw error;
+    response = JSON.parse(JSON.stringify(result));
+    return res.send(response);
+  });
+});
+
+//Get Animals based on enclosure.
+router.get("/list_by_enclosure", (req, res, next) => {
+  let location_id = parseInt(req.query.location);
+
+  let sql =
+    "SELECT animals.*, species.species_name   FROM animals  JOIN species on animals.species_id = species.species_id  WHERE animals.location_id = ?";
+  db.query(sql, [location_id], (error, result) => {
     if (error) throw error;
     response = JSON.parse(JSON.stringify(result));
     return res.send(response);

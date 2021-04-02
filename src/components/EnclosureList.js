@@ -9,6 +9,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
+import Link from "@material-ui/core/Link";
 
 //Import images
 import Elephant from "../images/Elephant.jpg";
@@ -22,6 +23,7 @@ import axios from "axios";
 import { base_url } from "../config";
 import { TextField } from "@material-ui/core";
 import { images_path } from "../config";
+import { useRouteMatch } from "react-router-dom";
 
 const enclosure_data = [
   {
@@ -79,7 +81,8 @@ const cardStyles = makeStyles({
   },
 });
 
-const EnclosureCard = ({ name, description, image }) => {
+const EnclosureCard = ({ name, description, image, id }) => {
+  let { url } = useRouteMatch();
   const classes = cardStyles();
 
   return (
@@ -103,11 +106,13 @@ const EnclosureCard = ({ name, description, image }) => {
           </CardActionArea>
         </div>
         <div>
-          <CardActions>
-            <Button size="small" color="primary">
-              Learn More
-            </Button>
-          </CardActions>
+          <Link style={{ textDecoration: "none" }} href={`${url}/${id}`}>
+            <CardActions>
+              <Button size="small" color="primary">
+                Learn More
+              </Button>
+            </CardActions>
+          </Link>
         </div>
       </Card>
     </div>
@@ -121,7 +126,7 @@ const EnclosureList = () => {
 
   const getAllEnclosures = () => {
     axios
-      .get(`${base_url}/enclosures`)
+      .get(`/enclosures`)
       .then((res) => {
         // console.log(res);
         // const with_image = res.data.map((e) => {
@@ -156,6 +161,7 @@ const EnclosureList = () => {
               <EnclosureCard
                 name={enclosure.location_name}
                 image={`/uploads/${enclosure.location_image}`}
+                id={enclosure.location_id}
               />
             </Grid>
           );

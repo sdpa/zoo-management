@@ -42,13 +42,11 @@ const EmployeeDashboard = () => {
 
   const getEnclosureNames = () => {
     axios
-      .get(`${base_url}/enclosures`)
+      .get(`/enclosures`)
       .then((res) => {
         console.log(res.data);
-        let names = res.data.map((e) => {
-          return e.location_name;
-        });
-        setEnclosureNames(names);
+
+        setEnclosureNames(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -57,7 +55,7 @@ const EmployeeDashboard = () => {
 
   const getAllSpecies = () => {
     axios
-      .get(`${base_url}/species`)
+      .get(`/species`)
       .then((res) => {
         console.log(res.data);
         setSpecies(res.data);
@@ -95,7 +93,7 @@ const EmployeeDashboard = () => {
   const handleSubmit = (values) => {
     console.log("handleSubmit called");
     axios
-      .post(`${base_url}/animals`, {
+      .post(`/animals`, {
         date_arrived: values.date_arrived,
         deceased_date: values.deceased_date,
         birth_day: values.birth_day,
@@ -153,9 +151,9 @@ const EmployeeDashboard = () => {
               name="location"
               error={formik.errors.location}
               className={classes.select}>
-              {enclosureNames.map((name) => (
-                <MenuItem key={name} value={name}>
-                  {name}
+              {enclosureNames.map((e, index) => (
+                <MenuItem key={index} value={e.location_id}>
+                  {e.location_name}
                 </MenuItem>
               ))}
             </Select>
