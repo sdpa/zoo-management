@@ -6,9 +6,13 @@ import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:5000";
 
+import { UserProvider } from './components/UserContext'
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <UserProvider>
+      <App />
+    </UserProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

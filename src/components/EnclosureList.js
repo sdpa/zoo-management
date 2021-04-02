@@ -128,6 +128,8 @@ const EnclosureList = () => {
     axios
       .get(`/enclosures`)
       .then((res) => {
+        console.log(res);
+
         // console.log(res);
         // const with_image = res.data.map((e) => {
         //   return {
@@ -167,12 +169,16 @@ const EnclosureList = () => {
           );
         })}
       </Grid>
+
+      {/* <Button onClick={createEnclosure}>Create Enclosure</Button> */}
+
       <TextField variant="outlined">Location Name</TextField>
       <Button variant="contained">
         Upload Image
         <input type="file" hidden />
       </Button>
       <Button>Create Enclosure</Button>
+
     </div>
   );
 };

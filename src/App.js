@@ -10,10 +10,26 @@ import EnclosureDetailed from "./components/EnclosureDetailed";
 
 // NEED TO "npm install" @material-ui dependencies
 // npm install @material-ui/core
+// npm install @material-ui/pickers
+// npm install date-fns @date-io/date-fns@1
+// npm install --save moment
+// there may be other material uis too 
 // there may be other material uis too
+
 function App() {
+
+  // to initialize session storage if not created yet
+  if (sessionStorage.getItem("auth") === null) {
+    sessionStorage.setItem("auth", false); 
+  }
+  
+  if (sessionStorage.getItem("username") === null) {
+    sessionStorage.setItem("username", "guest"); 
+  }
+
   return (
     <div className="App">
+
       {/* add your pages here  */}
       <BrowserRouter>
         <Switch>
