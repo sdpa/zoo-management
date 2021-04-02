@@ -122,8 +122,6 @@ function Ticket() {
   return(
     <div>
 
-    <Navbar/>
-
     <h1>
     Tickets
     </h1>
