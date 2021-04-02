@@ -9,7 +9,7 @@ import Button from "@material-ui/core/Button";
 import { useHistory } from "react-router-dom";
 import { UserContext } from "./UserContext";
 
-
+// LOGIN STUFF NEEDS TO CHANGE !!!! IMPORTANT 
 // styling should change a little bit
 function Navbar() {
 
@@ -48,10 +48,9 @@ function Navbar() {
         <Typography variant="h6">
           Better Houston Zoo
         </Typography>
-        
 
-
-         {/* this needs to change! "login(customer)" should go to UserLogin.js later   */}
+         {/* this needs to change! "login(customer)" should go to UserLogin.js later 
+              should combine log in buttuns into 1 later */}
         {
           !user.auth && (
             <div>
@@ -59,10 +58,18 @@ function Navbar() {
                 Welcome, guest
               </Button>
               <Button onClick={() => {
-                login("customer")
+                // needs to change
+                login("customer", "customer", 1); 
                 goToLogInPage(); 
                 }}>
-                Log in
+                Log in (customer)
+              </Button>
+              <Button onClick={() => {
+                // needs to change 
+                login("employee", "employee", 2); 
+                goToLogInPage(); 
+                }}>
+                Log in (employee)
               </Button>
               <Button onClick={goToSignUpPage}>
                 Sign up

@@ -27,6 +27,14 @@ function App() {
     sessionStorage.setItem("username", "guest"); 
   }
 
+  if (sessionStorage.getItem("role") === null) {
+    sessionStorage.setItem("role", null);
+  }
+
+  if (sessionStorage.getItem("userID") === null) {
+    sessionStorage.setItem("userID", null);
+  }
+
   return (
     <div className="App">
 

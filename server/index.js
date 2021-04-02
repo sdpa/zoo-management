@@ -6,6 +6,7 @@ const cors = require("cors");
 var enclosuresRouter = require("./routes/enclosures");
 var speciesRouter = require("./routes/species");
 var animalsRouter = require("./routes/animals");
+var purchaseHistoryRouter = require("./routes/purchasehistory");
 
 const app = express();
 app.use(cors());
@@ -18,6 +19,7 @@ const PORT = process.env.PORT || 5000;
 app.use("/enclosures", enclosuresRouter);
 app.use("/species", speciesRouter);
 app.use("/animals", animalsRouter);
+app.use("/purchasehistory", purchaseHistoryRouter); 
 
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);

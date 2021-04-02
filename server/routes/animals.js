@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../database");
 
-//Enter an animal into zoo
+//Enter a merchandise into zoo
 router.post("/", (req, res, next) => {
   let body = req.body;
   let animal = {

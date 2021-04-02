@@ -4,15 +4,26 @@ export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
 
-  const [user, setUser] = useState({ name: sessionStorage.getItem("username"), auth: sessionStorage.getItem("auth") === 'true' });
+  const [user, setUser] = useState({ 
+    name: sessionStorage.getItem("username"), 
+    auth: sessionStorage.getItem("auth") === 'true', 
+    role: sessionStorage.getItem("role"),  
+    userID: sessionStorage.getItem("userID"),
+  });
 
-  const login = (name) => {
+
+  // this needs to change when login stuff is done 
+  const login = (name, role, userID) => {
     setUser(() => ({
       name: name,
       auth: true,
+      role: role,
+      userID: userID
     }));
     sessionStorage.setItem('username', name);
     sessionStorage.setItem('auth', true); 
+    sessionStorage.setItem('role', role);
+    sessionStorage.setItem('userID', userID); 
   };
 
   const logout = () => {
@@ -22,6 +33,8 @@ export const UserProvider = ({ children }) => {
     }));
     sessionStorage.setItem('username', "guest");
     sessionStorage.setItem('auth', false); 
+    sessionStorage.setItem('role', null); 
+    sessionStorage.setItem('userID', null); 
   };
 
   return (

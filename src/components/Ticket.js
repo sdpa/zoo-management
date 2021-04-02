@@ -11,8 +11,8 @@ import { useHistory } from "react-router-dom";
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import Moment from 'moment';
+import axios from "axios";
 
-//ticket info needs to be sent to db
 function Ticket() {
 
   const { user } = useContext(UserContext); 
@@ -21,9 +21,8 @@ function Ticket() {
   const [childTicketCount, setChildTicketCount] = useState(0);
   const [totalCost, setTotalCost] = useState(0); 
   const [showTotalCost, setShowTotalCost] = useState(false); 
-  const [selectedDate, setSelectedDate] = useState(Moment(new Date()).format('MM-DD-YYYYY'));
+  const [selectedDate, setSelectedDate] = useState(Moment(new Date()).format('MM-DD-YYYY'));
 
-  // formatting date
   const handleDateChange = (date) => {
     setSelectedDate(Moment(date).format('MM-DD-YYYY'));
   };
@@ -41,25 +40,54 @@ function Ticket() {
     setTotalCost(childTicketCount * 5 + adultTicketCount * 10);
   }
 
-  // needs work later after db setup
-  function sendTicketInfoToDB() {
-    emptyStates(); 
-  }
-
   // emptying all state values after confirming/cancelling purchase
   function emptyStates() {
     setAdultTicketCount(0);
     setChildTicketCount(0);
     setTotalCost(0);
     setShowTotalCost(false); 
-    setSelectedDate(Moment(new Date()).format('MM-DD-YYYYY')); 
+    setSelectedDate(Moment(new Date()).format('MM-DD-YYYY')); 
   }
 
+  // redirect to login page when trying to purchase tickets while not signed in 
   const history = useHistory();
 
   const goToLogInPage = () => {
     let path = '/login';
     history.push(path); 
+  }
+
+
+  // sending ticket info to db 
+  const handleSubmit = (values) => {
+    console.log("purchasing tickets...");
+    axios
+      .post(`/purchasehistory`, {
+        item_purchased: values.item_purchased, 
+        customer_id: values.customer_id,
+        quantity_purchased: values.quantity_purchased,
+        total_purchase_cost: values.total_purchase_cost,
+        purchase_time: values.purchase_time,
+        ticket_date: values.ticket_date, 
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("failed!"); 
+      });
+  };
+
+
+  // constructor for ticket info thats going to be sent to db
+  function dbInfoForTickets(item_purchased, quantity_purchased, price, ticket_date) {
+    this.item_purchased = item_purchased;
+    this.customer_id = user.userID;
+    this.quantity_purchased = quantity_purchased;
+    this.total_purchase_cost = quantity_purchased * price; 
+    this.purchase_time = new Date();
+    this.ticket_date = ticket_date; 
   }
 
   // ticket card box
@@ -141,7 +169,15 @@ function Ticket() {
         <Button variant="outlined" color="primary" onClick={() => {
           if (user.auth) {
             alert(adultTicketCount + " adult ticket(s) " + childTicketCount + " child ticket(s) on " + selectedDate +  " for $" + totalCost); 
-            sendTicketInfoToDB();
+            if (adultTicketCount > 0) {
+              handleSubmit(new dbInfoForTickets(1, adultTicketCount, 10, selectedDate));
+              console.log(new dbInfoForTickets(1, adultTicketCount, 10, selectedDate));
+            }
+            if (childTicketCount > 0) {
+              handleSubmit(new dbInfoForTickets(2, childTicketCount, 5, selectedDate));
+              console.log(new dbInfoForTickets(2, childTicketCount, 5, selectedDate));
+            }
+            emptyStates(); 
           } else {
             goToLogInPage(); 
           }
