@@ -11,6 +11,7 @@ import {
   LinearProgress,
   Dialog,
   Paper,
+  Modal,
 } from "@material-ui/core";
 
 import Table from "@material-ui/core/Table";
@@ -26,23 +27,49 @@ import axios from "axios";
 
 import { useHistory } from "react-router-dom";
 
-const useStyles = makeStyles({
-  table: {
-    minWidth: 650,
-  },
-});
-
 const EnclosureDetailed = ({ match }) => {
   // console.log(match);
 
   let history = useHistory();
   console.log(history);
-  const classes = useStyles();
 
   const [loading, setLoading] = useState(true);
+
+  //Modal
+  const [currentAnimal, setCurretAnimal] = useState({
+    animal_name: "",
+  });
+  const [open, setOpen] = useState(false);
+
+  const handleModalOpen = (animal) => {
+    console.log("Animal", animal);
+    setCurretAnimal(animal);
+    setOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setOpen(false);
+  };
+
   //Get animals in the Enclosure.
 
   const [animals, setAnimals] = useState([]);
+
+  const [enclosure, setEnclosure] = useState({});
+
+  const getEnclosure = () => {
+    axios
+      .get(`enclosures/by_id`, {
+        params: { location: match.params.id },
+      })
+      .then((res) => {
+        console.log("Enclosure: ", res);
+        setEnclosure(res.data[0]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const getAnimals = () => {
     axios
@@ -60,6 +87,7 @@ const EnclosureDetailed = ({ match }) => {
   };
 
   useEffect(() => {
+    getEnclosure();
     getAnimals();
   }, []);
 
@@ -69,15 +97,16 @@ const EnclosureDetailed = ({ match }) => {
         <LinearProgress color="primary" />
       ) : (
         <>
-          <Typography>Animals in</Typography>
-          <TableContainer component={Paper}>
-            <Table className={classes.table} aria-label="simple table">
+          <Typography>{`Animals in ${enclosure.location_name} Enclosure`}</Typography>
+          <TableContainer component={Paper} style={{ width: 800 }}>
+            <Table aria-label="simple table">
               <TableHead>
                 <TableRow>
                   <TableCell>Name </TableCell>
                   <TableCell align="right">Species</TableCell>
                   <TableCell align="right">Date of Birth</TableCell>
                   <TableCell align="right">Date Arrived</TableCell>
+                  <TableCell align="right">Health Status</TableCell>
                   <TableCell align="right">Actions</TableCell>
                 </TableRow>
               </TableHead>
@@ -90,8 +119,15 @@ const EnclosureDetailed = ({ match }) => {
                     <TableCell align="right">{animal.species_name}</TableCell>
                     <TableCell align="right">{animal.birth_day}</TableCell>
                     <TableCell align="right">{animal.date_arrived}</TableCell>
+                    <TableCell align="right">{animal.health_status}</TableCell>
                     <TableCell align="right">
-                      <Button variant="outlined">Edit</Button>
+                      <Button
+                        variant="outlined"
+                        onClick={() => {
+                          handleModalOpen(animal);
+                        }}>
+                        Edit
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}

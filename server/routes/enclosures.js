@@ -25,6 +25,19 @@ router.get("/", (req, res, next) => {
   });
 });
 
+//Get enclosure by ID
+router.get("/by_id", (req, res, next) => {
+  let location_id = parseInt(req.query.location);
+  let sql = "SELECT * FROM locations WHERE location_id=?";
+
+  let response = {};
+  db.query(sql, [location_id], (error, result) => {
+    if (error) throw error;
+    response = JSON.parse(JSON.stringify(result));
+    return res.send(response);
+  });
+});
+
 //Create an enclosure
 router.post(
   "/",
