@@ -43,7 +43,7 @@ router.get("/list_by_enclosure", (req, res, next) => {
   let location_id = parseInt(req.query.location);
 
   let sql =
-    "SELECT animals.*, species.species_name   FROM animals  JOIN species on animals.species_id = species.species_id  WHERE animals.location_id = ?";
+    "SELECT animals.*, species.species_name   FROM animals  JOIN species on animals.species_id = species.species_id  WHERE animals.location_id = ? and animals.health_status != 'Deceased' ";
   db.query(sql, [location_id], (error, result) => {
     if (error) throw error;
     response = JSON.parse(JSON.stringify(result));

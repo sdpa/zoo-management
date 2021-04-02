@@ -9,6 +9,7 @@ import {
   Input,
   Grid,
   FormHelperText,
+  Modal,
 } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
@@ -125,108 +126,110 @@ const EmployeeDashboard = () => {
   });
 
   return (
-    <form className="form">
-      <Typography>Add Animal to Zoo</Typography>
-      <Grid container spacing={2}>
-        <Grid item>
-          <FormControl>
-            <InputLabel htmlFor="name">Name</InputLabel>
-            <Input
-              id="name"
-              onChange={formik.handleChange}
-              name="animal_name"
-              error={formik.errors.animal_name}
-            />
-            <FormHelperText className={classes.errMessage}>
-              {formik.errors.animal_name}
-            </FormHelperText>
-          </FormControl>
+    <>
+      <form className="form">
+        <Typography>Add Animal to Zoo</Typography>
+        <Grid container spacing={2}>
+          <Grid item>
+            <FormControl>
+              <InputLabel htmlFor="name">Name</InputLabel>
+              <Input
+                id="name"
+                onChange={formik.handleChange}
+                name="animal_name"
+                error={formik.errors.animal_name}
+              />
+              <FormHelperText className={classes.errMessage}>
+                {formik.errors.animal_name}
+              </FormHelperText>
+            </FormControl>
+          </Grid>
+          <Grid item>
+            <FormControl>
+              <InputLabel id="enclosureName">Enclosure Name</InputLabel>
+              <Select
+                labelId="enclosureName"
+                onChange={formik.handleChange}
+                name="location"
+                error={formik.errors.location}
+                className={classes.select}>
+                {enclosureNames.map((e, index) => (
+                  <MenuItem key={index} value={e.location_id}>
+                    {e.location_name}
+                  </MenuItem>
+                ))}
+              </Select>
+              <FormHelperText className={classes.errMessage}>
+                {formik.errors.location}
+              </FormHelperText>
+            </FormControl>
+          </Grid>
+          <Grid item>
+            <FormControl>
+              <InputLabel id="species">Species</InputLabel>
+              <Select
+                labelId="species"
+                onChange={formik.handleChange}
+                name="species"
+                error={formik.errors.species}
+                className={classes.select}>
+                {species.map((s, index) => (
+                  <MenuItem key={index} value={s.species_id}>
+                    {s.species_name}
+                  </MenuItem>
+                ))}
+              </Select>
+              <FormHelperText className={classes.errMessage}>
+                {formik.errors.species}
+              </FormHelperText>
+            </FormControl>
+          </Grid>
+          <Grid item>
+            <FormControl>
+              <InputLabel id="dob" shrink>
+                Date of Birth
+              </InputLabel>
+              <Input
+                labelId="dob"
+                type="date"
+                onChange={formik.handleChange}
+                error={formik.errors.birth_day}
+                name="birth_day"
+              />
+              <FormHelperText className={classes.errMessage}>
+                {formik.errors.birth_day}
+              </FormHelperText>
+            </FormControl>
+          </Grid>
+          <Grid item>
+            <FormControl>
+              <InputLabel id="dob" shrink>
+                Arrival Date
+              </InputLabel>
+              <Input
+                labelId="dob"
+                type="date"
+                defaultValue={new Date().toDateString()}
+                onChange={formik.handleChange}
+                error={formik.errors.date_arrived}
+                name="date_arrived"
+              />
+              <FormHelperText className={classes.errMessage}>
+                {formik.errors.date_arrived}
+              </FormHelperText>
+            </FormControl>
+          </Grid>
+          <Grid item>
+            <Button
+              variant="outlined"
+              onClick={formik.handleSubmit}
+              type="submit">
+              Add Animal
+            </Button>
+          </Grid>
         </Grid>
-        <Grid item>
-          <FormControl>
-            <InputLabel id="enclosureName">Enclosure Name</InputLabel>
-            <Select
-              labelId="enclosureName"
-              onChange={formik.handleChange}
-              name="location"
-              error={formik.errors.location}
-              className={classes.select}>
-              {enclosureNames.map((e, index) => (
-                <MenuItem key={index} value={e.location_id}>
-                  {e.location_name}
-                </MenuItem>
-              ))}
-            </Select>
-            <FormHelperText className={classes.errMessage}>
-              {formik.errors.location}
-            </FormHelperText>
-          </FormControl>
-        </Grid>
-        <Grid item>
-          <FormControl>
-            <InputLabel id="species">Species</InputLabel>
-            <Select
-              labelId="species"
-              onChange={formik.handleChange}
-              name="species"
-              error={formik.errors.species}
-              className={classes.select}>
-              {species.map((s, index) => (
-                <MenuItem key={index} value={s.species_id}>
-                  {s.species_name}
-                </MenuItem>
-              ))}
-            </Select>
-            <FormHelperText className={classes.errMessage}>
-              {formik.errors.species}
-            </FormHelperText>
-          </FormControl>
-        </Grid>
-        <Grid item>
-          <FormControl>
-            <InputLabel id="dob" shrink>
-              Date of Birth
-            </InputLabel>
-            <Input
-              labelId="dob"
-              type="date"
-              onChange={formik.handleChange}
-              error={formik.errors.birth_day}
-              name="birth_day"
-            />
-            <FormHelperText className={classes.errMessage}>
-              {formik.errors.birth_day}
-            </FormHelperText>
-          </FormControl>
-        </Grid>
-        <Grid item>
-          <FormControl>
-            <InputLabel id="dob" shrink>
-              Arrival Date
-            </InputLabel>
-            <Input
-              labelId="dob"
-              type="date"
-              defaultValue={new Date().toDateString()}
-              onChange={formik.handleChange}
-              error={formik.errors.date_arrived}
-              name="date_arrived"
-            />
-            <FormHelperText className={classes.errMessage}>
-              {formik.errors.date_arrived}
-            </FormHelperText>
-          </FormControl>
-        </Grid>
-        <Grid item>
-          <Button
-            variant="outlined"
-            onClick={formik.handleSubmit}
-            type="submit">
-            Add Animal
-          </Button>
-        </Grid>
-      </Grid>
-    </form>
+      </form>
+    </>
   );
 };
 
