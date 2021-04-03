@@ -3,7 +3,6 @@ import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Typography, Paper, Box, Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import SubmitButton from "./SubmitButton";
 import { AlternateEmail, DriveEtaTwoTone } from "@material-ui/icons";
 import axios from "axios";
 import { useFormik } from "formik";
@@ -153,7 +152,7 @@ const UserLogin = (props) => {
             }
           />
         </Grid>
-        <Link to="/register">
+        <Link to="/create">
           <Typography className={classes.signUp}>Sign Up</Typography>
         </Link>
         <Button

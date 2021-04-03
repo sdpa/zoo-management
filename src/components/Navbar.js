@@ -63,14 +63,14 @@ function Navbar() {
                 }}>
                 Log in (customer)
               </Button>
-              <Button
+              {/* <Button
                 onClick={() => {
                   // needs to change
                   // login("employee", "employee", 2);
                   goToLogInPage();
                 }}>
                 Log in (employee)
-              </Button>
+              </Button> */}
               <Button onClick={goToSignUpPage}>Sign up</Button>
             </div>
           )}

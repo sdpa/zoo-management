@@ -4,6 +4,8 @@ import Navbar from "./Navbar";
 import { useFormik } from "formik";
 import { Typography, Grid, TextField, Button } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
+import axios from 'axios';
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,6 +31,7 @@ function CreateUser() {
   const classes = useStyles();
 
   const [alertError, setAlertError] = useState(null);
+  let history  = useHistory()
 
   const handleLogin = (values) => {
     axios
@@ -51,7 +54,7 @@ function CreateUser() {
           })
           .then((res) => {
             console.log(res);
-            props.setLoggedIn(true);
+            values.setLoggedIn(true);
           })
           .catch((err) => {
             //Can't find profile
