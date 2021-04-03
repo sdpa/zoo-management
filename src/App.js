@@ -5,7 +5,7 @@ import Ticket from "./components/Ticket";
 import EnclosureList from "./components/EnclosureList";
 import CreateUser from "./components/CreateUser";
 import UserLogin from "./components/UserLogin";
-import EmployeeDashboard from "./components/EmplyeeDashboard";
+import EmployeeDashboard from "./components/EmployeeDashboard";
 import EnclosureDetailed from "./components/EnclosureDetailed";
 import Navbar from "./components/Navbar";
 
