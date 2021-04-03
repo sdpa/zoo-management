@@ -25,7 +25,7 @@ router.post(
     const email = req.body.email;
 
     db.query(
-      "SELECT * FROM Users WHERE email = ? ",
+      "SELECT * FROM users WHERE email = ? ",
       [email],
       (err, results) => {
         if (err) throw err;
@@ -34,15 +34,17 @@ router.post(
           return res.status(400).json({ error: "Account does not exist" });
         }
         console.log(user[0]);
-        let hash = user[0].password;
+        let hash = user[0].pswd;
         let password = req.body.password;
         bcrypt.compare(password, hash, (err, response) => {
           if (response == true) {
+            user = user[0];
             let result = {
               user_id: user.user_id,
               role_id: user.role_id,
               full_name: user.full_name,
             };
+            console.log(result);
             res.send(result);
           } else {
             return res.status(400).json({ error: "Wrong Password" });
