@@ -1,9 +1,12 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Navbar from "./Navbar";
 import { useFormik } from "formik";
 import { Typography, Grid, TextField, Button } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
+import { UserContext } from "./UserContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,39 +28,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function CreateUser() {
+function CreateUser(props) {
   const classes = useStyles();
+
+  const { login, logout } = useContext(UserContext);
 
   const [alertError, setAlertError] = useState(null);
 
+  let history = useHistory();
+
   const handleLogin = (values) => {
     axios
-      .post("/login", {
+      .post("/signup", {
+        full_name: values.full_name,
         email: values.email,
         password: values.password,
+        role_id: "Customer",
       })
       .then((res) => {
         console.log(res);
-        const access_token = res.data.accessToken;
-        localStorage.setItem("access_token", res.data.accessToken);
-        localStorage.setItem("user_id", res.data.user_id);
-        // props.setLoggedIn(true);
-        //Make request to profile, it if exists, we go to dashboard.
-        axios
-          .get("http://localhost:9000/profile", {
-            headers: {
-              Authorization: `Bearer ${access_token}`,
-            },
-          })
-          .then((res) => {
-            console.log(res);
-            props.setLoggedIn(true);
-          })
-          .catch((err) => {
-            //Can't find profile
-            console.log(err);
-            history.push("/profile");
-          });
+        //role_id, full_name, user_id
+        login(res.data.full_name, res.data.role_id, res.data.user_id);
+        history.push("/");
       })
       .catch((err) => {
         //Log In failed.
@@ -77,6 +69,9 @@ function CreateUser() {
   };
   const validate = (values) => {
     let errors = {};
+    if (!values.full_name) {
+      errors.password = "Required";
+    }
     if (!values.email) {
       errors.email = "Required";
     } else if (
@@ -116,6 +111,24 @@ function CreateUser() {
           {alertError}
         </Alert>
       ) : null}
+      <Grid item xs={12}>
+        <TextField
+          label="Full Name"
+          id="full_name"
+          onChange={formik.handleChange}
+          name="full_name"
+          variant="outlined"
+          style={{ width: "100%" }}
+          error={errors.full_name || formik.errors.full_name}
+          helperText={
+            errors.full_name != ""
+              ? errors.full_name
+              : formik.errors.full_name != ""
+              ? formik.errors.full_name
+              : ""
+          }
+        />
+      </Grid>
       <Grid item xs={12}>
         <TextField
           label="Email"

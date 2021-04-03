@@ -2,14 +2,13 @@ var express = require("express");
 var router = express.Router();
 var bcrypt = require("bcrypt");
 var { body, validationResult } = require("express-validator");
-const jwt = require("jsonwebtoken");
 var db = require("../database.js");
 
 //Login api
 router.post(
   "/",
   [
-    body("email").isEmail().isLength({ max: 25 }),
+    body("email").isEmail().isLength({ max: 50 }),
     body("password").isLength({ min: 4 }),
   ],
   async (req, res, next) => {
@@ -37,11 +36,14 @@ router.post(
         console.log(user[0]);
         let hash = user[0].password;
         let password = req.body.password;
-        // console.log(String.fromCharCode(binaryPass));
-        // console.log(hashedPassword);
         bcrypt.compare(password, hash, (err, response) => {
           if (response == true) {
-            res.status(200);
+            let result = {
+              user_id: user.user_id,
+              role_id: user.role_id,
+              full_name: user.full_name,
+            };
+            res.send(result);
           } else {
             return res.status(400).json({ error: "Wrong Password" });
           }

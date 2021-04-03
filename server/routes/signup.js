@@ -2,27 +2,12 @@ var express = require("express");
 var router = express.Router();
 var bcrypt = require("bcrypt");
 var { body, validationResult } = require("express-validator");
-const jwt = require("jsonwebtoken");
 var db = require("../database.js");
-
-let users = [
-  {
-    email: "user1@test1.com",
-    password: "pass1",
-  },
-  {
-    email: "user2@test2.com",
-    password: "pass2",
-  },
-  {
-    email: "user3@test3.com",
-    password: "pass3",
-  },
-];
 
 router.post(
   "/",
   [
+    body("full_name").notEmpty().withMessage("Required"),
     body("email")
       .isEmail()
       .withMessage("Enter valid Email")
@@ -43,7 +28,7 @@ router.post(
     let user = [];
     //Get users in database
     db.query(
-      "SELECT * FROM Users WHERE email = ? ",
+      "SELECT * FROM users WHERE email = ? ",
       [email],
       (err, results) => {
         if (err) throw err;
@@ -53,16 +38,48 @@ router.post(
           console.log("lenght is 1");
           return res.status(400).json({ error: "Account already exists" });
         } else {
+          user = user[0];
+          var today = new Date();
+          var dd = today.getDate();
+
+          var mm = today.getMonth() + 1;
+          var yyyy = today.getFullYear();
+          if (dd < 10) {
+            dd = "0" + dd;
+          }
+
+          if (mm < 10) {
+            mm = "0" + mm;
+          }
+          today = yyyy + "-" + mm + "-" + dd;
           let new_user = {
+            full_name: req.body.full_name,
             email: req.body.email,
-            password: hashedPassword,
+            pswd: hashedPassword,
+            date_created: today,
+            role_id: req.body.role_id,
+            is_active: true,
           };
-          //Crete user in database
-          db.query("INSERT INTO Users SET ? ", new_user, (err, results) => {
+          console.log("Today: ", today);
+          // Crete user in database
+          db.query("INSERT INTO users SET ? ", new_user, (err, results) => {
             if (err) throw err;
-            user = JSON.parse(JSON.stringify(results));
+            console.log(results);
+            db.query(
+              "SELECT * FROM users WHERE email = ? ",
+              [req.body.email],
+              (err, results) => {
+                user = JSON.parse(JSON.stringify(results))[0];
+                console.log("new user created: ", user);
+                let result = {
+                  user_id: user.user_id,
+                  role_id: user.role_id,
+                  full_name: user.full_name,
+                };
+                return res.send(result);
+              }
+            );
           });
-          return res.status(200);
         }
       }
     );
