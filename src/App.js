@@ -8,6 +8,7 @@ import UserLogin from "./components/UserLogin";
 import EmployeeDashboard from "./components/EmplyeeDashboard";
 import EnclosureDetailed from "./components/EnclosureDetailed";
 import Navbar from "./components/Navbar";
+import PurchaseHistory from "./components/PurchaseHistory";
 
 // NEED TO "npm install" @material-ui dependencies
 // npm install @material-ui/core
@@ -49,6 +50,7 @@ function App() {
           <Route exact path="/create" component={CreateUser} />
           <Route exact path="/login" component={UserLogin} />
           <Route exact path="/dashboard" component={EmployeeDashboard} />
+          <Route exact path="/history" component={PurchaseHistory} />
         </Switch>
       </BrowserRouter>
     </div>
