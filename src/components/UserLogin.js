@@ -145,7 +145,7 @@ const UserLogin = (props) => {
             }
           />
         </Grid>
-        <Link to="/register">
+        <Link to="/create">
           <Typography className={classes.signUp}>Sign Up</Typography>
         </Link>
         <Button

@@ -34,6 +34,7 @@ function CreateUser(props) {
   const { login, logout } = useContext(UserContext);
 
   const [alertError, setAlertError] = useState(null);
+  let history = useHistory();
 
   let history = useHistory();
 
