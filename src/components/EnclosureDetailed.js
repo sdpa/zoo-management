@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   List,
   ListItem,
@@ -9,9 +9,14 @@ import {
   Chip,
   ListItemText,
   LinearProgress,
-  Dialog,
   Paper,
   Modal,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Select,
+  MenuItem,
 } from "@material-ui/core";
 
 import Table from "@material-ui/core/Table";
@@ -27,13 +32,19 @@ import axios from "axios";
 
 import { useHistory } from "react-router-dom";
 
+import { UserContext } from "./UserContext";
+
 const EnclosureDetailed = ({ match }) => {
   // console.log(match);
+
+  const { user } = useContext(UserContext);
 
   let history = useHistory();
   console.log(history);
 
   const [loading, setLoading] = useState(true);
+
+  const [openDialog, setOpenDialog] = useState(false);
 
   //Modal
   const [currentAnimal, setCurretAnimal] = useState({
@@ -44,11 +55,35 @@ const EnclosureDetailed = ({ match }) => {
   const handleModalOpen = (animal) => {
     console.log("Animal", animal);
     setCurretAnimal(animal);
-    setOpen(true);
+    setOpenDialog(true);
   };
 
   const handleModalClose = () => {
-    setOpen(false);
+    setOpenDialog(false);
+  };
+
+  const handleHealthStatusChange = (e) => {
+    setCurretAnimal({
+      ...currentAnimal,
+      health_status: e.target.value,
+    });
+  };
+
+  const handleSave = () => {
+    axios
+      .put("/animals/change_health", currentAnimal)
+      .then((res) => {
+        setOpenDialog(false);
+        console.log(res);
+      })
+      .catch((err) => {
+        setOpenDialog(true);
+        console.log(err);
+      });
+  };
+
+  const handleCancel = () => {
+    setOpenDialog(false);
   };
 
   //Get animals in the Enclosure.
@@ -107,7 +142,9 @@ const EnclosureDetailed = ({ match }) => {
                   <TableCell align="right">Date of Birth</TableCell>
                   <TableCell align="right">Date Arrived</TableCell>
                   <TableCell align="right">Health Status</TableCell>
-                  <TableCell align="right">Actions</TableCell>
+                  {user.role == "Employee" ? (
+                    <TableCell align="right">Actions</TableCell>
+                  ) : null}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -120,20 +157,55 @@ const EnclosureDetailed = ({ match }) => {
                     <TableCell align="right">{animal.birth_day}</TableCell>
                     <TableCell align="right">{animal.date_arrived}</TableCell>
                     <TableCell align="right">{animal.health_status}</TableCell>
-                    <TableCell align="right">
-                      <Button
-                        variant="outlined"
-                        onClick={() => {
-                          handleModalOpen(animal);
-                        }}>
-                        Edit
-                      </Button>
-                    </TableCell>
+                    {user.role == "Employee" ? (
+                      <TableCell align="right">
+                        <Button
+                          variant="outlined"
+                          onClick={() => {
+                            handleModalOpen(animal);
+                          }}>
+                          Edit
+                        </Button>
+                      </TableCell>
+                    ) : null}
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
+
+          {/* Modal for changing health status */}
+          <div>
+            <Dialog open={openDialog}>
+              <DialogTitle>
+                Change the Health of {currentAnimal.animal_name}
+              </DialogTitle>
+              <DialogContent>
+                <Select
+                  id="health_status"
+                  value={currentAnimal.health_status}
+                  onChange={handleHealthStatusChange}>
+                  <MenuItem value={"Healthy"}>Healthy</MenuItem>
+                  <MenuItem value={"Sick"}>Sick</MenuItem>
+                  <MenuItem value={"Deceased"}>Deceased</MenuItem>
+                </Select>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  onClick={handleSave}
+                  variant="contained"
+                  color="secondary">
+                  Save
+                </Button>
+                <Button
+                  onClick={handleCancel}
+                  variant="contained"
+                  color="secondary">
+                  CANCEL
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
         </>
       )}
     </>

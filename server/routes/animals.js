@@ -56,9 +56,10 @@ router.get("/list_by_enclosure", (req, res, next) => {
 router.put("/change_health", (req, res, next) => {
   //Get animal from database
   db.query(
-    "SELECT * FROM animls WHERE animal_id = ? ",
+    "SELECT * FROM animals WHERE animal_id = ? ",
     [req.body.animal_id],
     (err, results) => {
+      if (err) throw err;
       animal = JSON.parse(JSON.stringify(results))[0];
       let current_health = animal.health_status;
       let new_health = req.body.health_status;
