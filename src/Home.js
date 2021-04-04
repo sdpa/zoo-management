@@ -82,9 +82,6 @@ function Home() {
                     <MenuList
                       autoFocusItem={open}
                       onKeyDown={handleListKeyDown}>
-                      <MenuItem component={Link} to="/">
-                        Sign Up
-                      </MenuItem>
                       <MenuItem component={Link} to="/ticket">
                         Tickets
                       </MenuItem>
