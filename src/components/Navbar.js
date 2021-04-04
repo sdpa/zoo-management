@@ -40,7 +40,7 @@ function Navbar() {
   return (
     <div>
       <AppBar position="static">
-        <Toolbar variant="dense">
+        <Toolbar variant="dense" style={{padding:0}}>
           <IconButton
             edge="start"
             color="inherit"
