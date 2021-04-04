@@ -9,6 +9,7 @@ import EmployeeDashboard from "./components/EmployeeDashboard";
 import EnclosureDetailed from "./components/EnclosureDetailed";
 import Navbar from "./components/Navbar";
 import PurchaseHistory from "./components/PurchaseHistory";
+import "./App.css";
 
 // NEED TO "npm install" @material-ui dependencies
 // npm install @material-ui/core

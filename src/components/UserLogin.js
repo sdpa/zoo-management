@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Typography, Paper, Box, Button } from "@material-ui/core";
@@ -8,6 +8,7 @@ import axios from "axios";
 import { useFormik } from "formik";
 import { useHistory } from "react-router-dom";
 import Alert from "@material-ui/lab/Alert";
+import { UserContext } from "./UserContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,6 +32,8 @@ const useStyles = makeStyles((theme) => ({
 
 const UserLogin = (props) => {
   const classes = useStyles();
+
+  const { login, logout } = useContext(UserContext);
 
   let history = useHistory();
 
@@ -63,39 +66,24 @@ const UserLogin = (props) => {
       })
       .then((res) => {
         console.log(res);
-        // localStorage.setItem("user_id", res.data.user_id);
-        // // props.setLoggedIn(true);
-        // //Make request to profile, it if exists, we go to dashboard.
-        // axios
-        //   .get("http://localhost:9000/profile", {
-        //     headers: {
-        //       Authorization: `Bearer ${access_token}`,
-        //     },
-        //   })
-        //   .then((res) => {
-        //     console.log(res);
-        //     props.setLoggedIn(true);
-        //   })
-        //   .catch((err) => {
-        //     //Can't find profile
-        //     console.log(err);
-        //     history.push("/profile");
-        //   });
+        login(res.data.full_name, res.data.role_id, res.data.user_id);
+        console.log("Login successful");
+        history.push("/");
       })
       .catch((err) => {
         //Log In failed.
         console.log(err.response);
-        // console.log("Errors: ", err.response.data);
-        // let errors_response = err.response.data.errors;
-        // let new_errors = { email: "", password: "" };
-        // if (Array.isArray(errors_response)) {
-        //   errors_response.forEach((error) => {
-        //     new_errors[error.param] = error.msg;
-        //   });
-        //   setErrors(new_errors);
-        // } else {
-        //   setAlertError(err.response.data.error);
-        // }
+        console.log("Errors: ", err.response.data);
+        let errors_response = err.response.data.errors;
+        let new_errors = { email: "", password: "" };
+        if (Array.isArray(errors_response)) {
+          errors_response.forEach((error) => {
+            new_errors[error.param] = error.msg;
+          });
+          setErrors(new_errors);
+        } else {
+          setAlertError(err.response.data.error);
+        }
       });
   };
 

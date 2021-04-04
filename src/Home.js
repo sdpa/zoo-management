@@ -47,7 +47,7 @@ function Home() {
             backgroundImage: `url(${background})`,
             backgroundPosition: "cover",
             width: "100%",
-            height: "780px",
+            height: "888px",
             padding: "20",
           }}>
           <Button
