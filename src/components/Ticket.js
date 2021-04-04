@@ -5,7 +5,6 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
-// import Navbar from './Navbar';
 import { UserContext } from "./UserContext";
 import { useHistory } from "react-router-dom";
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
@@ -13,6 +12,10 @@ import DateFnsUtils from '@date-io/date-fns';
 import Moment from 'moment';
 import axios from "axios";
 
+
+ // NEED TO RUN "npm i @date-io/date-fns@1.3.13" COMMANDS IF YOU GET 
+ // RangeError: Format string contains an unescaped latin alphabet character n 
+ 
 function Ticket() {
 
   const { user } = useContext(UserContext); 

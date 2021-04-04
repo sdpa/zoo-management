@@ -11,8 +11,6 @@ export const UserProvider = ({ children }) => {
     userID: sessionStorage.getItem("userID"),
   });
 
-
-  // this needs to change when login stuff is done 
   const login = (name, role, userID) => {
     setUser(() => ({
       name: name,
