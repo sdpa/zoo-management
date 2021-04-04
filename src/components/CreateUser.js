@@ -1,6 +1,5 @@
-import React, { Component, useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Navbar from "./Navbar";
 import { useFormik } from "formik";
 import { Typography, Grid, TextField, Button } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
@@ -31,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 function CreateUser(props) {
   const classes = useStyles();
 
-  const { login, logout } = useContext(UserContext);
+  const { login } = useContext(UserContext);
 
   const [alertError, setAlertError] = useState(null);
   let history = useHistory();
@@ -120,9 +119,9 @@ function CreateUser(props) {
           style={{ width: "100%" }}
           error={errors.full_name || formik.errors.full_name}
           helperText={
-            errors.full_name != ""
+            errors.full_name !== ""
               ? errors.full_name
-              : formik.errors.full_name != ""
+              : formik.errors.full_name !== ""
               ? formik.errors.full_name
               : ""
           }
@@ -138,9 +137,9 @@ function CreateUser(props) {
           style={{ width: "100%" }}
           error={errors.email || formik.errors.email}
           helperText={
-            errors.email != ""
+            errors.email !== ""
               ? errors.email
-              : formik.errors.email != ""
+              : formik.errors.email !== ""
               ? formik.errors.email
               : ""
           }
@@ -156,9 +155,9 @@ function CreateUser(props) {
           style={{ width: "100%" }}
           error={errors.password || formik.errors.password}
           helperText={
-            errors.password != ""
+            errors.password !== ""
               ? errors.password
-              : formik.errors.password != ""
+              : formik.errors.password !== ""
               ? formik.errors.password
               : ""
           }

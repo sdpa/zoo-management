@@ -3,7 +3,7 @@ import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Typography, Paper, Box, Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import { AlternateEmail, DriveEtaTwoTone } from "@material-ui/icons";
+// import { AlternateEmail, DriveEtaTwoTone } from "@material-ui/icons";
 import axios from "axios";
 import { useFormik } from "formik";
 import { useHistory } from "react-router-dom";
@@ -116,7 +116,7 @@ const UserLogin = (props) => {
             variant="outlined"
             style={{ width: "100%" }}
             error={formik.errors.email}
-            helperText={formik.errors.email != "" ? formik.errors.email : ""}
+            helperText={formik.errors.email !== "" ? formik.errors.email : ""}
           />
         </Grid>
         <Grid item xs={12}>
@@ -129,7 +129,7 @@ const UserLogin = (props) => {
             style={{ width: "100%" }}
             error={formik.errors.password}
             helperText={
-              formik.errors.password != "" ? formik.errors.password : ""
+              formik.errors.password !== "" ? formik.errors.password : ""
             }
           />
         </Grid>

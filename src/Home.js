@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "./components/Navbar.js";
+// import Navbar from "./components/Navbar.js";
 import background from "./images/zoo.jpg";
 import Button from "@material-ui/core/Button";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
@@ -47,7 +47,7 @@ function Home() {
             backgroundImage: `url(${background})`,
             backgroundPosition: "cover",
             width: "100%",
-            height: "888px",
+            height: "888px", // this needs to be fixed into something more modular but 100% doesn't work
             padding: "20",
           }}>
           <Button
@@ -82,9 +82,6 @@ function Home() {
                     <MenuList
                       autoFocusItem={open}
                       onKeyDown={handleListKeyDown}>
-                      <MenuItem component={Link} to="/">
-                        Sign Up
-                      </MenuItem>
                       <MenuItem component={Link} to="/ticket">
                         Tickets
                       </MenuItem>

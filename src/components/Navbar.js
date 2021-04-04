@@ -54,14 +54,14 @@ function Navbar() {
               should combine log in buttuns into 1 later */}
           {!user.auth && (
             <div>
-              <Button>Welcome, guest</Button>
+              {/* <Button>Welcome, guest</Button> */}
               <Button
                 onClick={() => {
                   // needs to change
                   // login("customer", "customer", 1);
                   goToLogInPage();
                 }}>
-                Log in (customer)
+                Log in
               </Button>
               {/* <Button
                 onClick={() => {
