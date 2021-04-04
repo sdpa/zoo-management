@@ -6,7 +6,7 @@ const cors = require("cors");
 var enclosuresRouter = require("./routes/enclosures");
 var speciesRouter = require("./routes/species");
 var animalsRouter = require("./routes/animals");
-var purchaseHistoryRouter = require("./routes/purchasehistory");
+var purchaseHistoryRouter = require("./routes/purchaseHistory");
 var signupRouter = require("./routes/signup");
 var loginRouter = require("./routes/login");
 
