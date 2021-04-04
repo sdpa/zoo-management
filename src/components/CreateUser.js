@@ -36,8 +36,6 @@ function CreateUser(props) {
   const [alertError, setAlertError] = useState(null);
   let history = useHistory();
 
-  let history = useHistory();
-
   const handleLogin = (values) => {
     axios
       .post("/signup", {

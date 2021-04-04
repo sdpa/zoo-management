@@ -52,4 +52,27 @@ router.get("/list_by_enclosure", (req, res, next) => {
   //   return res.send(200);
 });
 
+//Change health Status of animal.
+router.put("/change_health", (req, res, next) => {
+  //Get animal from database
+  db.query(
+    "SELECT * FROM animls WHERE animal_id = ? ",
+    [req.body.animal_id],
+    (err, results) => {
+      animal = JSON.parse(JSON.stringify(results))[0];
+      let current_health = animal.health_status;
+      let new_health = req.body.health_status;
+
+      db.query(
+        "UPDATE animals SET ? where animal_id = ? ",
+        [{ health_status: new_health }, req.body.animal_id],
+        (err, result) => {
+          if (err) throw err;
+          return res.send(200);
+        }
+      );
+    }
+  );
+});
+
 module.exports = router;
