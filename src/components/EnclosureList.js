@@ -54,17 +54,18 @@ const enclosure_data = [
 ];
 
 const useStyles = makeStyles({
-  categoryContainer: {
-    width: "80%",
-  },
   listCategory: {
     textTransform: "uppercase",
     fontWeight: "bold",
+    paddingTop: "10px",
   },
   divider: {
     height: "5px",
     backgroundColor: "green",
     width: "100%",
+  },
+  grid: {
+    padding: "10px",
   },
 });
 
@@ -153,10 +154,8 @@ const EnclosureList = () => {
   return (
     <div className={classes.categoryContainer}>
       {/* <Navbar></Navbar> */}
-
-      <Divider className={classes.divider}></Divider>
       <Typography className={classes.listCategory}>Enclosures</Typography>
-      <Grid direction="row" container spacing={2}>
+      <Grid direction="row" container spacing={2} className={classes.grid}>
         {enclosures.map((enclosure, i) => {
           return (
             <Grid item key={i}>
@@ -169,16 +168,6 @@ const EnclosureList = () => {
           );
         })}
       </Grid>
-
-      {/* <Button onClick={createEnclosure}>Create Enclosure</Button> */}
-
-      <TextField variant="outlined">Location Name</TextField>
-      <Button variant="contained">
-        Upload Image
-        <input type="file" hidden />
-      </Button>
-      <Button>Create Enclosure</Button>
-
     </div>
   );
 };
