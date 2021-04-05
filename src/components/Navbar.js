@@ -36,11 +36,6 @@ function Navbar() {
     history.push(path);
   };
 
-  const goToGiftShop = () => {
-    let path = "/shop";
-    history.push(path);
-  };
-
   return (
     <div>
       <AppBar position="static">
@@ -53,7 +48,6 @@ function Navbar() {
             <HomeIcon />
           </IconButton>
           <Typography variant="h6">Better Houston Zoo</Typography>
-          <Button onClick={goToGiftShop}>Gift Shop</Button>
           {!user.auth && (
             <div>
               <Button onClick={goToLogInPage}>Log in</Button>
