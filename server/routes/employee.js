@@ -2,6 +2,18 @@ const express = require("express");
 const router = express.Router();
 const db = require("../database");
 
+//Get all employees
+router.get("/all", (req, res, next) => {
+  db.query(
+    "SELECT employee.*, users.full_name, locations.location_name  FROM users, employee, locations  WHERE employee.user_id = users.user_id AND locations.location_id = employee.work_location",
+    (err, results) => {
+      if (err) throw err;
+      result = JSON.parse(JSON.stringify(results));
+      return res.send(result);
+    }
+  );
+});
+
 //Change employeee work location.
 router.put("/change_work_location", (req, res, next) => {
   const new_location = req.body.new_location;

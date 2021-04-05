@@ -13,6 +13,18 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
+//Get all locations
+router.get("/", (req, res, next) => {
+  let sql = "SELECT * FROM locations";
+
+  let response = {};
+  db.query(sql, (error, result) => {
+    if (error) throw error;
+    response = JSON.parse(JSON.stringify(result));
+    return res.send(response);
+  });
+});
+
 //Get all enclosures
 router.get("/all_enclsoures", (req, res, next) => {
   let sql = "SELECT * FROM locations WHERE location_type='Enclosure'";

@@ -36,6 +36,14 @@ function Navbar() {
     history.push(path);
   };
 
+  const goToDashboard = (role) => {
+    if (role == "Admin") {
+      history.push("/employee_dashboard");
+    } else {
+      history.push("/admin_dashboard");
+    }
+  };
+
   return (
     <div>
       <AppBar position="static">
@@ -73,6 +81,9 @@ function Navbar() {
                 }}>
                 Sign out
               </Button>
+              {user.role == "Admin" || user.role == "Employee" ? (
+                <Button onClick={goToDashboard}>Dash Board</Button>
+              ) : null}
             </div>
           )}
         </Toolbar>

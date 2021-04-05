@@ -27,7 +27,7 @@ app.use("/species", speciesRouter);
 app.use("/animals", animalsRouter);
 app.use("/merchandise", merchandiseRouter);
 app.use("/purchasehistory", purchaseHistoryRouter);
-app.use("/employee", employeeRouter);
+app.use("/employees", employeeRouter);
 
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);

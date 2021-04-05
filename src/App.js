@@ -13,6 +13,7 @@ import GiftShop from "./components/GiftShop";
 import "./App.css";
 import GiftShopList from "./components/GiftShopList";
 import GiftShopDetailed from "./components/GiftShopDetailed";
+import AdminDashboard from "./components/AdminDashboard";
 
 // NEED TO "npm install" @material-ui dependencies
 // npm install @material-ui/core
@@ -55,7 +56,12 @@ function App() {
           <Route exact path="/enclosure/:id" component={EnclosureDetailed} />
           <Route exact path="/create" component={CreateUser} />
           <Route exact path="/login" component={UserLogin} />
-          <Route exact path="/dashboard" component={EmployeeDashboard} />
+          <Route
+            exact
+            path="/employee_dashboard"
+            component={EmployeeDashboard}
+          />
+          <Route exact path="/admin_dashboard" component={AdminDashboard} />
           <Route exact path="/history" component={PurchaseHistory} />
           <Route exact path="/shop" component={GiftShop} />
         </Switch>
