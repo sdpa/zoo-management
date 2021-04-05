@@ -11,47 +11,11 @@ import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import Link from "@material-ui/core/Link";
 
-//Import images
-import Elephant from "../images/Elephant.jpg";
-import Giraffe from "../images/Giraffe.jpg";
-import Lion from "../images/Lion.jpg";
-import Rhinoceros from "../images/Rhinoceros.jpg";
-import Tiger from "../images/Tiger.jpg";
-import The_Safari from "../images/The_Safari.jpg";
-
 import axios from "axios";
 import { base_url } from "../config";
 import { TextField } from "@material-ui/core";
 import { images_path } from "../config";
 import { useRouteMatch } from "react-router-dom";
-
-const enclosure_data = [
-  {
-    enclosureName: "Elepant",
-    img: Elephant,
-    description: "This enclosure consists of Afriran American Elephants",
-  },
-  {
-    enclosureName: "Rhinoceros",
-    img: Rhinoceros,
-    description: "Come witness on of the most magnificent mammals",
-  },
-  {
-    enclosureName: "Giraffe",
-    img: Giraffe,
-    description: "Come meet the tallest terrestrial animal",
-  },
-  {
-    enclosureName: "Tiger",
-    img: Tiger,
-    description: "The Largest and most fierce cat",
-  },
-  {
-    enclosureName: "Lion",
-    img: Lion,
-    description: "The King of the Junge is here!",
-  },
-];
 
 const useStyles = makeStyles({
   listCategory: {
@@ -82,7 +46,7 @@ const cardStyles = makeStyles({
   },
 });
 
-const EnclosureCard = ({ name, description, image, id }) => {
+const GiftShopCard = ({ name, description, image, id }) => {
   let { url } = useRouteMatch();
   const classes = cardStyles();
 
@@ -120,14 +84,14 @@ const EnclosureCard = ({ name, description, image, id }) => {
   );
 };
 
-const EnclosureList = () => {
+const GiftShopList = () => {
   const classes = useStyles();
 
-  const [enclosures, setEnclosures] = useState([]);
+  const [giftShops, setGiftShops] = useState([]);
 
-  const getAllEnclosures = () => {
+  const getAllGiftShops = () => {
     axios
-      .get(`/locations/all_enclsoures`)
+      .get(`locations/all_gift_shops`)
       .then((res) => {
         console.log(res);
 
@@ -139,7 +103,7 @@ const EnclosureList = () => {
         //   };
         // });
         console.log(res.data);
-        setEnclosures(res.data);
+        setGiftShops(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -147,22 +111,22 @@ const EnclosureList = () => {
   };
 
   useEffect(() => {
-    getAllEnclosures();
+    getAllGiftShops();
     // console.log(enclosures);
   }, []);
 
   return (
     <div className={classes.categoryContainer}>
       {/* <Navbar></Navbar> */}
-      <Typography className={classes.listCategory}>Enclosures</Typography>
+      <Typography className={classes.listCategory}>Gift Shops</Typography>
       <Grid direction="row" container spacing={2} className={classes.grid}>
-        {enclosures.map((enclosure, i) => {
+        {giftShops.map((shop, i) => {
           return (
             <Grid item key={i}>
-              <EnclosureCard
-                name={enclosure.location_name}
-                image={`/uploads/${enclosure.location_image}`}
-                id={enclosure.location_id}
+              <GiftShopCard
+                name={shop.location_name}
+                image={`/uploads/${shop.location_image}`}
+                id={shop.location_id}
               />
             </Grid>
           );
@@ -172,4 +136,4 @@ const EnclosureList = () => {
   );
 };
 
-export default EnclosureList;
+export default GiftShopList;

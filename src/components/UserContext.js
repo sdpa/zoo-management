@@ -1,13 +1,12 @@
 import React, { createContext, useState } from "react";
 
-export const UserContext = createContext(); 
+export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-
-  const [user, setUser] = useState({ 
-    name: sessionStorage.getItem("username"), 
-    auth: sessionStorage.getItem("auth") === 'true', 
-    role: sessionStorage.getItem("role"),  
+  const [user, setUser] = useState({
+    name: sessionStorage.getItem("username"),
+    auth: sessionStorage.getItem("auth") === "true",
+    role: sessionStorage.getItem("role"),
     userID: sessionStorage.getItem("userID"),
   });
 
@@ -16,28 +15,28 @@ export const UserProvider = ({ children }) => {
       name: name,
       auth: true,
       role: role,
-      userID: userID
+      userID: userID,
     }));
-    sessionStorage.setItem('username', name);
-    sessionStorage.setItem('auth', true); 
-    sessionStorage.setItem('role', role);
-    sessionStorage.setItem('userID', userID); 
+    sessionStorage.setItem("username", name);
+    sessionStorage.setItem("auth", true);
+    sessionStorage.setItem("role", role);
+    sessionStorage.setItem("userID", userID);
   };
 
   const logout = () => {
     setUser(() => ({
-      name: 'guest',
+      name: "guest",
       auth: false,
     }));
-    sessionStorage.setItem('username', "guest");
-    sessionStorage.setItem('auth', false); 
-    sessionStorage.setItem('role', null); 
-    sessionStorage.setItem('userID', null); 
+    sessionStorage.setItem("username", "guest");
+    sessionStorage.setItem("auth", false);
+    sessionStorage.setItem("role", null);
+    sessionStorage.setItem("userID", null);
   };
 
   return (
     <UserContext.Provider value={{ user, login, logout }}>
       {children}
     </UserContext.Provider>
-  )
-}
+  );
+};

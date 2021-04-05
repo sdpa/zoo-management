@@ -33,28 +33,35 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 
 import { UserContext } from "./UserContext";
+import { CloudQueueRounded, LensOutlined } from "@material-ui/icons";
 
-const EnclosureDetailed = ({ match }) => {
+const GiftShopDetailed = ({ match }) => {
   // console.log(match);
+
+  let quantities = Array.from({ length: 10 }, (_, index) => {
+    return {
+      value: index + 1,
+    };
+  });
+
+  console.log(quantities);
 
   const { user } = useContext(UserContext);
 
   let history = useHistory();
-  console.log(history);
 
   const [loading, setLoading] = useState(true);
 
   const [openDialog, setOpenDialog] = useState(false);
 
   //Modal
-  const [currentAnimal, setCurretAnimal] = useState({
-    animal_name: "",
-  });
+  const [currentProduct, setCurrentProduct] = useState({});
+
   const [open, setOpen] = useState(false);
 
-  const handleModalOpen = (animal) => {
-    console.log("Animal", animal);
-    setCurretAnimal(animal);
+  const handleModalOpen = (product) => {
+    // console.log("Animal", animal);
+    setCurrentProduct(product);
     setOpenDialog(true);
   };
 
@@ -62,16 +69,68 @@ const EnclosureDetailed = ({ match }) => {
     setOpenDialog(false);
   };
 
-  const handleHealthStatusChange = (e) => {
-    setCurretAnimal({
-      ...currentAnimal,
-      health_status: e.target.value,
-    });
+  const handleCancel = () => {
+    setOpenDialog(false);
   };
 
-  const handleSave = () => {
+  //Get animals in the Enclosure.
+
+  const [products, setProducts] = useState([]);
+
+  const [giftShop, setGiftShop] = useState({});
+
+  const getGiftShop = () => {
     axios
-      .put("/animals/change_health", currentAnimal)
+      .get(`/locations/by_id`, {
+        params: { location: match.params.id },
+      })
+      .then((res) => {
+        setGiftShop(res.data[0]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getProducts = () => {
+    axios
+      .get(`/merchandise/all_products/`, {
+        params: { location: match.params.id },
+      })
+      .then((res) => {
+        console.log(res);
+        let products = res.data.map((each) => {
+          return {
+            ...each,
+            quantity_selected: 0,
+            amount_due: 0,
+          };
+        });
+        setProducts(products);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleSelectQuantity = (e, product) => {
+    const index = products.findIndex((elem) => elem.item_id == product.item_id);
+    let newProducts = [...products];
+    newProducts[index] = {
+      ...newProducts[index],
+      quantity_selected: e.target.value,
+      amount_due: e.target.value * product.price,
+    };
+    setProducts(newProducts);
+  };
+
+  const handleConfirm = () => {
+    axios
+      .post("/merchandise/buy", {
+        user_id: user.userID,
+        ...currentProduct,
+      })
       .then((res) => {
         setOpenDialog(false);
         console.log(res);
@@ -82,48 +141,9 @@ const EnclosureDetailed = ({ match }) => {
       });
   };
 
-  const handleCancel = () => {
-    setOpenDialog(false);
-  };
-
-  //Get animals in the Enclosure.
-
-  const [animals, setAnimals] = useState([]);
-
-  const [enclosure, setEnclosure] = useState({});
-
-  const getEnclosure = () => {
-    axios
-      .get(`/locations/enclosure/by_id`, {
-        params: { location: match.params.id },
-      })
-      .then((res) => {
-        console.log("Enclosure: ", res);
-        setEnclosure(res.data[0]);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const getAnimals = () => {
-    axios
-      .get(`/animals/list_by_enclosure/`, {
-        params: { location: match.params.id },
-      })
-      .then((res) => {
-        console.log(res);
-        setAnimals(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   useEffect(() => {
-    getEnclosure();
-    getAnimals();
+    getGiftShop();
+    getProducts();
   }, []);
 
   return (
@@ -132,49 +152,56 @@ const EnclosureDetailed = ({ match }) => {
         <LinearProgress color="primary" />
       ) : (
         <>
-          {animals.length > 0 ? (
+          {products.length > 0 ? (
             <>
-              <Typography>{`Animals in ${enclosure.location_name} Enclosure`}</Typography>
+              <Typography>{`Products in ${giftShop.location_name} Enclosure`}</Typography>
               <TableContainer
                 component={Paper}
                 style={{ width: 800, paddingTop: "10px" }}>
                 <Table aria-label="simple table">
                   <TableHead>
                     <TableRow>
-                      <TableCell>Name </TableCell>
-                      <TableCell align="right">Species</TableCell>
-                      <TableCell align="right">Date of Birth</TableCell>
-                      <TableCell align="right">Date Arrived</TableCell>
-                      <TableCell align="right">Health Status</TableCell>
-                      {user.role == "Employee" ? (
+                      <TableCell>Product Name </TableCell>
+                      <TableCell align="right">Product Price</TableCell>
+                      <TableCell align="right">Select Quntity</TableCell>
+                      {user.role == "Customer" ? (
                         <TableCell align="right">Actions</TableCell>
                       ) : null}
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {animals.map((animal) => (
-                      <TableRow key={animal.animal_id}>
+                    {products.map((product) => (
+                      <TableRow key={product.product_id}>
                         <TableCell component="th" scope="row">
-                          {animal.animal_name}
+                          {product.product_name}
                         </TableCell>
+                        <TableCell align="right">{product.price}</TableCell>
                         <TableCell align="right">
-                          {animal.species_name}
+                          <Select
+                            name="quantity_selected"
+                            style={{ width: "75px" }}
+                            value={product.quantity_selected}
+                            onChange={(e) => {
+                              handleSelectQuantity(e, product);
+                            }}>
+                            {quantities.map((q) => {
+                              return (
+                                <MenuItem key={q.value} value={q.value}>
+                                  {q.value}
+                                </MenuItem>
+                              );
+                            })}
+                          </Select>
                         </TableCell>
-                        <TableCell align="right">{animal.birth_day}</TableCell>
-                        <TableCell align="right">
-                          {animal.date_arrived}
-                        </TableCell>
-                        <TableCell align="right">
-                          {animal.health_status}
-                        </TableCell>
-                        {user.role == "Employee" ? (
+                        {user.role == "Customer" ? (
                           <TableCell align="right">
                             <Button
                               variant="outlined"
+                              disabled={product.quantity_selected == 0}
                               onClick={() => {
-                                handleModalOpen(animal);
+                                handleModalOpen(product);
                               }}>
-                              Edit
+                              Buy
                             </Button>
                           </TableCell>
                         ) : null}
@@ -187,25 +214,17 @@ const EnclosureDetailed = ({ match }) => {
               {/* Modal for changing health status */}
               <div>
                 <Dialog open={openDialog}>
-                  <DialogTitle>
-                    Change the Health of {currentAnimal.animal_name}
-                  </DialogTitle>
+                  <DialogTitle>Transaction Details</DialogTitle>
                   <DialogContent>
-                    <Select
-                      id="health_status"
-                      value={currentAnimal.health_status}
-                      onChange={handleHealthStatusChange}>
-                      <MenuItem value={"Healthy"}>Healthy</MenuItem>
-                      <MenuItem value={"Sick"}>Sick</MenuItem>
-                      <MenuItem value={"Deceased"}>Deceased</MenuItem>
-                    </Select>
+                    <Typography>{`The Total Cost of ${currentProduct.product_name} is $${currentProduct.amount_due}`}</Typography>
+                    <Typography>Are you sure you want to buy?</Typography>
                   </DialogContent>
                   <DialogActions>
                     <Button
-                      onClick={handleSave}
+                      onClick={handleConfirm}
                       variant="contained"
                       color="secondary">
-                      Save
+                      CONFIRM
                     </Button>
                     <Button
                       onClick={handleCancel}
@@ -218,7 +237,7 @@ const EnclosureDetailed = ({ match }) => {
               </div>
             </>
           ) : (
-            <Typography style={{ padding: "10px" }}>No Animals</Typography>
+            <Typography style={{ padding: "10px" }}>No Products</Typography>
           )}
         </>
       )}
@@ -226,4 +245,4 @@ const EnclosureDetailed = ({ match }) => {
   );
 };
 
-export default EnclosureDetailed;
+export default GiftShopDetailed;

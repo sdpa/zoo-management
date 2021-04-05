@@ -13,8 +13,8 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-//Get all encolusres
-router.get("/", (req, res, next) => {
+//Get all enclosures
+router.get("/all_enclsoures", (req, res, next) => {
   let sql = "SELECT * FROM locations WHERE location_type='Enclosure'";
 
   let response = {};
@@ -25,7 +25,19 @@ router.get("/", (req, res, next) => {
   });
 });
 
-//Get enclosure by ID
+//Get all gift_shops
+router.get("/all_gift_shops", (req, res, next) => {
+  let sql = "SELECT * FROM locations WHERE location_type='Gift shop'";
+
+  let response = {};
+  db.query(sql, (error, result) => {
+    if (error) throw error;
+    response = JSON.parse(JSON.stringify(result));
+    return res.send(response);
+  });
+});
+
+//Get location by ID
 router.get("/by_id", (req, res, next) => {
   let location_id = parseInt(req.query.location);
   let sql = "SELECT * FROM locations WHERE location_id=?";
@@ -38,7 +50,7 @@ router.get("/by_id", (req, res, next) => {
   });
 });
 
-//Create an enclosure
+//Create a location
 router.post(
   "/",
   [

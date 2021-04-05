@@ -10,6 +10,8 @@ import EnclosureDetailed from "./components/EnclosureDetailed";
 import Navbar from "./components/Navbar";
 import PurchaseHistory from "./components/PurchaseHistory";
 import "./App.css";
+import GiftShopList from "./components/GiftShopList";
+import GiftShopDetailed from "./components/GiftShopDetailed";
 
 // NEED TO "npm install" @material-ui dependencies
 // npm install @material-ui/core
@@ -46,6 +48,8 @@ function App() {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/ticket" component={Ticket} />
+          <Route exact path="/giftshops" component={GiftShopList} />
+          <Route exact path="/giftshops/:id" component={GiftShopDetailed} />
           <Route exact path="/enclosure" component={EnclosureList} />
           <Route exact path="/enclosure/:id" component={EnclosureDetailed} />
           <Route exact path="/create" component={CreateUser} />

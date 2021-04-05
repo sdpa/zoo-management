@@ -39,7 +39,7 @@ function Navbar() {
   return (
     <div>
       <AppBar position="static">
-        <Toolbar variant="dense" style={{padding:0}}>
+        <Toolbar variant="dense" style={{ padding: 0 }}>
           <IconButton
             edge="start"
             color="inherit"
@@ -67,7 +67,13 @@ function Navbar() {
                 <AccountCircleIcon />
               </IconButton>
 
-              <Button onClick={logout}>Sign out</Button>
+              <Button
+                onClick={() => {
+                  history.push("/");
+                  logout();
+                }}>
+                Sign out
+              </Button>
             </div>
           )}
         </Toolbar>

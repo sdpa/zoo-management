@@ -3,10 +3,11 @@ const cors = require("cors");
 // const fileupload = require("express-fileupload");
 // const bodyParser = require("body-parser");
 
-var enclosuresRouter = require("./routes/enclosures");
+var locationRouter = require("./routes/locations");
 var speciesRouter = require("./routes/species");
 var animalsRouter = require("./routes/animals");
 var purchaseHistoryRouter = require("./routes/purchaseHistory");
+var merchandiseRouter = require("./routes/merchandise");
 var signupRouter = require("./routes/signup");
 var loginRouter = require("./routes/login");
 
@@ -20,9 +21,10 @@ const PORT = process.env.PORT || 5000;
 
 app.use("/signup", signupRouter);
 app.use("/login", loginRouter);
-app.use("/enclosures", enclosuresRouter);
+app.use("/locations", locationRouter);
 app.use("/species", speciesRouter);
 app.use("/animals", animalsRouter);
+app.use("/merchandise", merchandiseRouter);
 app.use("/purchasehistory", purchaseHistoryRouter);
 
 app.listen(PORT, () => {

@@ -88,6 +88,9 @@ function Home() {
                       <MenuItem component={Link} to="/enclosure">
                         Enclosures
                       </MenuItem>
+                      <MenuItem component={Link} to="/giftshops">
+                        Gift Shops
+                      </MenuItem>
                     </MenuList>
                   </ClickAwayListener>
                 </Paper>
