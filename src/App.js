@@ -9,6 +9,7 @@ import EmployeeDashboard from "./components/EmployeeDashboard";
 import EnclosureDetailed from "./components/EnclosureDetailed";
 import Navbar from "./components/Navbar";
 import PurchaseHistory from "./components/PurchaseHistory";
+import GiftShop from "./components/GiftShop";
 import "./App.css";
 import GiftShopList from "./components/GiftShopList";
 import GiftShopDetailed from "./components/GiftShopDetailed";
@@ -56,6 +57,7 @@ function App() {
           <Route exact path="/login" component={UserLogin} />
           <Route exact path="/dashboard" component={EmployeeDashboard} />
           <Route exact path="/history" component={PurchaseHistory} />
+          <Route exact path="/shop" component={GiftShop} />
         </Switch>
       </BrowserRouter>
     </div>
