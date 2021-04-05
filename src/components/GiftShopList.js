@@ -91,7 +91,7 @@ const GiftShopList = () => {
 
   const getAllGiftShops = () => {
     axios
-      .get(`locations/all_gift_shops`)
+      .get(`https://zoo-backend-test.herokuapp.com/locations/all_gift_shops`)
       .then((res) => {
         console.log(res);
 

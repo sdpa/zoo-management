@@ -9,6 +9,7 @@ import { useFormik } from "formik";
 import { useHistory } from "react-router-dom";
 import Alert from "@material-ui/lab/Alert";
 import { UserContext } from "./UserContext";
+import { base_url } from "../config";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -60,7 +61,7 @@ const UserLogin = (props) => {
 
   const handleLogin = (values) => {
     axios
-      .post("/login", {
+      .post("https://zoo-backend-test.herokuapp.com/login", {
         email: values.email,
         password: values.password,
       })

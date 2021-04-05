@@ -127,7 +127,7 @@ const EnclosureList = () => {
 
   const getAllEnclosures = () => {
     axios
-      .get(`/locations/all_enclsoures`)
+      .get(`https://zoo-backend-test.herokuapp.com/locations/all_enclsoures`)
       .then((res) => {
         console.log(res);
 

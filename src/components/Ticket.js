@@ -65,7 +65,7 @@ function Ticket() {
   const handleSubmit = (values) => {
     console.log("purchasing tickets...");
     axios
-      .post(`/purchasehistory`, {
+      .post(`https://zoo-backend-test.herokuapp.com/purchasehistory`, {
         item_purchased: values.item_purchased, 
         customer_id: values.customer_id,
         quantity_purchased: values.quantity_purchased,

@@ -62,7 +62,7 @@ const AdminDashboard = () => {
 
   const getAllEmployees = () => {
     axios
-      .get(`/employees/all`)
+      .get(`https://zoo-backend-test.herokuapp.com/employees/all`)
       .then((res) => {
         console.log(res.data);
         setEmployees(res.data);
@@ -74,7 +74,7 @@ const AdminDashboard = () => {
 
   const getLocations = () => {
     axios
-      .get(`/locations`)
+      .get(`https://zoo-backend-test.herokuapp.com/locations`)
       .then((res) => {
         console.log(res.data);
         setLocations(res.data);
@@ -99,7 +99,7 @@ const AdminDashboard = () => {
 
   const handleSave = () => {
     axios
-      .put("/employees/change_work_location", {
+      .put("https://zoo-backend-test.herokuapp.com/employees/change_work_location", {
         new_location: currentEmployee.work_location,
         employee_id: currentEmployee.employee_id,
       })

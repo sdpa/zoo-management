@@ -37,7 +37,7 @@ function CreateUser(props) {
 
   const handleLogin = (values) => {
     axios
-      .post("/signup", {
+      .post("https://zoo-backend-test.herokuapp.com/signup", {
         full_name: values.full_name,
         email: values.email,
         password: values.password,
