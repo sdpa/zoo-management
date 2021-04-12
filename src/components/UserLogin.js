@@ -134,9 +134,6 @@ const UserLogin = (props) => {
             }
           />
         </Grid>
-        <Link to="/create">
-          <Typography className={classes.signUp}>Sign Up</Typography>
-        </Link>
         <Button
           onClick={formik.handleSubmit}
           variant="contained"
