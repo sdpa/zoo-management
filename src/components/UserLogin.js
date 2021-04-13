@@ -61,7 +61,7 @@ const UserLogin = (props) => {
 
   const handleLogin = (values) => {
     axios
-      .post("https://zoo-backend-test.herokuapp.com/login", {
+      .post("/login", {
         email: values.email,
         password: values.password,
       })

@@ -81,7 +81,7 @@ const GiftShopDetailed = ({ match }) => {
 
   const getGiftShop = () => {
     axios
-      .get(`https://zoo-backend-test.herokuapp.com/locations/by_id`, {
+      .get(`/locations/by_id`, {
         params: { location: match.params.id },
       })
       .then((res) => {
@@ -94,7 +94,7 @@ const GiftShopDetailed = ({ match }) => {
 
   const getProducts = () => {
     axios
-      .get(`https://zoo-backend-test.herokuapp.com/merchandise/all_products/`, {
+      .get(`/merchandise/all_products/`, {
         params: { location: match.params.id },
       })
       .then((res) => {
@@ -127,7 +127,7 @@ const GiftShopDetailed = ({ match }) => {
 
   const handleConfirm = () => {
     axios
-      .post("https://zoo-backend-test.herokuapp.com/merchandise/buy", {
+      .post("/merchandise/buy", {
         user_id: user.userID,
         ...currentProduct,
       })

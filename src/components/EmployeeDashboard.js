@@ -44,7 +44,7 @@ const EmployeeDashboard = () => {
 
   const getEnclosureNames = () => {
     axios
-      .get(`https://zoo-backend-test.herokuapp.com/enclosures`)
+      .get(`/enclosures`)
       .then((res) => {
         console.log(res.data);
 
@@ -57,7 +57,7 @@ const EmployeeDashboard = () => {
 
   const getAllSpecies = () => {
     axios
-      .get(`https://zoo-backend-test.herokuapp.com/species`)
+      .get(`/species`)
       .then((res) => {
         console.log(res.data);
         setSpecies(res.data);
@@ -95,7 +95,7 @@ const EmployeeDashboard = () => {
   const handleSubmit = (values) => {
     console.log("handleSubmit called");
     axios
-      .post(`https://zoo-backend-test.herokuapp.com/animals`, {
+      .post(`/animals`, {
         date_arrived: values.date_arrived,
         deceased_date: values.deceased_date,
         birth_day: values.birth_day,

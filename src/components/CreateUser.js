@@ -35,13 +35,13 @@ function CreateUser(props) {
   const [alertError, setAlertError] = useState(null);
   let history = useHistory();
 
-  const handleLogin = (values) => {
+  const handleSignup = (values) => {
     axios
-      .post("https://zoo-backend-test.herokuapp.com/signup", {
+      .post("/signup", {
         full_name: values.full_name,
         email: values.email,
         password: values.password,
-        role_id: "Admin",
+        role_id: "Customer",
       })
       .then((res) => {
         console.log(res);
@@ -92,7 +92,7 @@ function CreateUser(props) {
     },
     validate,
     onSubmit: (values) => {
-      handleLogin(values);
+      handleSignup(values);
     },
   });
 
@@ -127,6 +127,26 @@ function CreateUser(props) {
           }
         />
       </Grid>
+      {props.createEmployee ? (
+        <Grid item xs={12}>
+          <TextField
+            label="Email"
+            id="email"
+            onChange={formik.handleChange}
+            name="email"
+            variant="outlined"
+            style={{ width: "100%" }}
+            error={errors.email || formik.errors.email}
+            helperText={
+              errors.email !== ""
+                ? errors.email
+                : formik.errors.email !== ""
+                ? formik.errors.email
+                : ""
+            }
+          />
+        </Grid>
+      ) : null}
       <Grid item xs={12}>
         <TextField
           label="Email"

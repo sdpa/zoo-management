@@ -70,13 +70,31 @@ router.post(
               [req.body.email],
               (err, results) => {
                 user = JSON.parse(JSON.stringify(results))[0];
-                console.log("new user created: ", user);
-                let result = {
-                  user_id: user.user_id,
-                  role_id: user.role_id,
-                  full_name: user.full_name,
-                };
-                return res.send(result);
+                if (user.role_id == "Employee") {
+                  console.log("Role is is employee");
+                  let new_employee = {
+                    job_title: "zookeeper",
+                    user_id: user.user_id,
+                    wage: 30.0,
+                    work_location: req.body.work_location,
+                  };
+                  db.query(
+                    "INSERT INTO employee SET ? ",
+                    new_employee,
+                    (err, results) => {
+                      if (err) throw err;
+                      return res.send(`Added ${user.full_name} to zoo.`);
+                    }
+                  );
+                } else {
+                  console.log("Role is not employee");
+                  let result = {
+                    user_id: user.user_id,
+                    role_id: user.role_id,
+                    full_name: user.full_name,
+                  };
+                  return res.send(result);
+                }
               }
             );
           });
