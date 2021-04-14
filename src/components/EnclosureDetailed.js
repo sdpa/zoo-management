@@ -94,7 +94,7 @@ const EnclosureDetailed = ({ match }) => {
 
   const getEnclosure = () => {
     axios
-      .get(`/locations/enclosure/by_id`, {
+      .get(`/locations/by_id`, {
         params: { location: match.params.id },
       })
       .then((res) => {
