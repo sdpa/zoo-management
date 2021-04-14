@@ -44,7 +44,7 @@ const EmployeeDashboard = () => {
 
   const getEnclosureNames = () => {
     axios
-      .get(`/enclosures`)
+      .get(`/locations/all_enclsoures`)
       .then((res) => {
         console.log(res.data);
 
