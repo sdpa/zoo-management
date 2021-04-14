@@ -219,27 +219,8 @@ function Home() {
                                 </GridListTile>
                             ))}
                         </GridList>
-                        <View style={{ zIndex: 2, position: 'absolute', top: 75, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center' }}>
-                            <Text style={{
-                                fontSize: '48px',
-                                width: '80%',
-                                fontWeight: 'bold',
-                                padding: '20px',
-                                backgroundColor: 'white',
-                                color: '#194d33',
-                            }}>Welcome to the Zoo Homepage! </Text>
-                            <Text
-                                style={{
-                                    width: '80%',
-                                    fontSize: '36px',
-                                    color: '#194d33',
-                                    paddintBottom: '30',
-                                    backgroundColor: 'white',
-                                }}> The Houston Zoo is open and ready to welcome you and your family  to connect with the animals you know and love.</Text>
-                        </View>
 
-
-                    </div>
+                  </div>
                 </div>
             </div>
         </div>
