@@ -21,7 +21,6 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
-import { View, Text } from "react-native";
 
 function Home() {
     const [open, setOpen] = React.useState(false);
@@ -102,7 +101,6 @@ function Home() {
             overflow: 'hidden',
             backgroundColor: 'transparent',
             position: 'absolute',
-            zIndex: 3,
             width: '80%',
             height: '400%',
             fontColor: '#194d33',
@@ -143,7 +141,6 @@ function Home() {
                     <Button component={Link} to="/ticket"
                         style={{
                             position: 'relative',
-                            zIndex: 0,
                             width: '25%',
                             borderRadius: 5,
                             backgroundColor: "white",
@@ -160,7 +157,6 @@ function Home() {
                     <Button component={Link} to="/enclosure"
                         style={{
                             position: 'relative',
-                            zIndex: 0,
                             width: '25%',
                             borderRadius: 5,
                             backgroundColor: "white",
@@ -178,7 +174,6 @@ function Home() {
                     <Button component={Link} to="/giftshops"
                         style={{
                             position: 'relative',
-                            zIndex: 0,
                             width: '25%',
                             borderRadius: 5,
                             backgroundColor: "white",
