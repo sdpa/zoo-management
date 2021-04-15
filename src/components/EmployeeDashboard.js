@@ -230,6 +230,72 @@ const EmployeeDashboard = () => {
           </Grid>
         </Grid>
       </form>
+
+
+
+
+
+      
+     
+    <form className="form">
+        <Typography>Delete Animal from the Zoo</Typography>
+        <Grid container spacing={2} style={{ padding: "10px" }}>        
+            
+          
+          <Grid item>
+            <FormControl>
+              <InputLabel id="enclosureName">Enclosure Name</InputLabel>
+              <Select
+                labelId="enclosureName"
+                onChange={formik.handleChange}
+                name="location"
+                error={formik.errors.location}
+                className={classes.select}>
+                {enclosureNames.map((e, index) => (
+                  <MenuItem key={index} value={e.location_id}>
+                    {e.location_name}
+                  </MenuItem>
+                ))}
+              </Select>
+              <FormHelperText className={classes.errMessage}>
+                {formik.errors.location}
+              </FormHelperText>
+            </FormControl>
+          
+          </Grid>
+
+          <Grid item>
+            <FormControl>
+              <InputLabel id="enclosureName">Animal Name</InputLabel>
+              <Select
+                labelId="enclosureName"
+                onChange={formik.handleChange}
+                name="location"
+                error={formik.errors.location}
+                className={classes.select}>
+                {enclosureNames.map((e, index) => (
+                  <MenuItem key={index} value={e.location_id}>
+                    {e.location_name}
+                  </MenuItem>
+                ))}
+              </Select>
+              <FormHelperText className={classes.errMessage}>
+                {formik.errors.location}
+              </FormHelperText>
+            </FormControl>
+          
+          </Grid>
+          
+          <Grid item>
+            <Button
+              variant="outlined"
+              onClick={formik.handleSubmit}
+              type="submit">
+              Delete Animal
+            </Button>
+          </Grid>
+        </Grid>
+      </form>
     </>
   );
 };
