@@ -92,19 +92,19 @@ const EnclosureDetailed = ({ match }) => {
 
     const [enclosure, setEnclosure] = useState({});
 
-    const getEnclosure = () => {
-        axios
-            .get(`/locations/by_id`, {
-                params: { location: match.params.id },
-            })
-            .then((res) => {
-                console.log("Enclosure: ", res);
-                setEnclosure(res.data[0]);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
+  const getEnclosure = () => {
+    axios
+      .get(`/locations/by_id`, {
+        params: { location: match.params.id },
+      })
+      .then((res) => {
+        console.log("Enclosure: ", res);
+        setEnclosure(res.data[0]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
     const getAnimals = () => {
         axios
