@@ -12,34 +12,11 @@ import {
     // Modal,
 } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import TextField from '@material-ui/core/TextField';
 import axios from "axios";
 // import { base_url } from "../config";
 import { useFormik } from "formik";
 import { makeStyles } from "@material-ui/core/styles";
-import clsx from 'clsx';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import Checkbox from '@material-ui/core/Checkbox';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-const theStyles = makeStyles((theme) => ({
-    root: {
-        width: '900px',
-        variant: 'contained',
-        position: 'right',
-        border: '3px solid #4A90E2',
-        borderColor: 'gray',
-        color: 'black',
-        align: 'right',
-        minWidth: 50,
-        '& .MuiTextField-root': {
-            margin: theme.spacing(4),
-            width: '10ch',
-        },
-    },
-}));
+import { useContext } from "./UserContext";
 
 const useStyles = makeStyles({
     select: {
@@ -67,7 +44,7 @@ const EmployeeDashboard = () => {
 
     const getEnclosureNames = () => {
         axios
-            .get(`/enclosures`)
+            .get(`/locations/all_enclsoures`)
             .then((res) => {
                 console.log(res.data);
 
@@ -114,44 +91,6 @@ const EmployeeDashboard = () => {
         }
         return errors;
     };
-    const [values, setValues] = useState({
-        investigator: '',
-        checked: true,
-        purchase: '',
-        enclosure: '',
-        animal: '',
-        customer: '',
-        dateFrom: '',
-        dateTo: '',
-    });
-    const handleReport = (values) => {
-        console.log("handleReport called");
-        axios
-            .post('/values', {
-                investigator: values.investigator,
-                checked: true,
-                purchase: values.purchase,
-                enclosure: values.ensloure,
-                animal: values.animal,
-                customer: values.customer,
-                dateFrom: values.dateFrom,
-                dateTo: values.dateTo,
-            })
-            .then((res) => {
-                console.log(res);
-            })
-            .catch((err) => {
-                console.log(err);
-
-            });
-
-    };
-    const handleChange = (prop) => (event) => {
-        setValues({ ...values, [prop]: event.target.value });
-    };
-    const handlecheck = (event) => {
-        setValues({ ...values, [event.target.name]: event.target.checked });
-    };
 
     const handleSubmit = (values) => {
         console.log("handleSubmit called");
@@ -186,11 +125,9 @@ const EmployeeDashboard = () => {
             handleSubmit(values);
         },
     });
-    const classy = theStyles();
 
     return (
         <>
-
             <form className="form">
                 <Typography>Add Animal to Zoo</Typography>
                 <Grid container spacing={2} style={{ padding: "10px" }}>
@@ -294,123 +231,71 @@ const EmployeeDashboard = () => {
                 </Grid>
             </form>
 
-            <div className={classy.root} noValidate autoComplete="off">
-                <div>
-                    <Typography style={{
-                        align: 'middle',
-                        fontSize: '32px',
 
-                    }}>Report Request</Typography>
-                    <Typography align="left" style={{
-                        fontSize: '22px',
-                        fontWeight: 'bold',
-                    }}>Activity Report{'\n'}</Typography>
-                </div>
-                <div>
-                    <FormControl spacing={2} style={{ marginBottom: '20px', width: '40%' }} className={clsx(classy.margin, classy.textField)} variant="outlined">
-                        <InputLabel htmlFor="outlined-adornment-amount">Investigator</InputLabel>
-                        <OutlinedInput
-                            id="outline"
-                            label="name"
-                            value={values.investigtor}
-                            onChange={handleReport('investigator')}
-                            aria-describedby="outlined-weight-helper-text"
-                            labelWidth={0}
-                        />
-                    </FormControl>
 
-                    <FormControlLabel
-                        padding="30px"
-                        control={
-                            <Checkbox
-                                checked={values.checked}
-                                onChange={handlecheck}
-                                name="checked"
-                                color="primary"
-                            />
-                        }
-                        label="Include Inactive Employees or something"
-                    />
-                </div>
 
-                <Typography align="left" style={{
-                    fontSize: '18px',
-                }}>Select atleast one item: </Typography>
-                <div>
-                    <FormControl style={{ marginBottom: '20px', width: '40%' }} className={clsx(classy.margin, classy.textField)} variant="outlined">
-                        <InputLabel htmlFor="outlined-adornment-amount">Purchases</InputLabel>
-                        <OutlinedInput
-                            label="outline"
-                            id="outlined-adornment-purchase"
-                            value={values.product}
-                            onChange={handleReport('purchase')}
-                            aria-describedby="outlined-weight-helper-text"
-                            labelWidth={0}
-                        />
-                    </FormControl>
-                    <FormControl style={{ marginBottom: '20px', width: '40%' }} className={clsx(classy.margin, classy.textField)} variant="outlined">
-                        <InputLabel htmlFor="outlined-adornment-amount">Enclosures</InputLabel>
-                        <OutlinedInput
-                            label="outline"
-                            id="outlined-adornment-enclosure"
-                            value={values.enclosure}
-                            onChange={handleReport('enclosure')}
-                            aria-describedby="outlined-weight-helper-text"
-                            labelWidth={0}
-                        />
-                    </FormControl>
-                </div>
-                <div>
-                    <FormControl style={{ marginBottom: '20px', width: '40%' }} className={clsx(classy.margin, classy.textField)} variant="outlined">
-                        <InputLabel htmlFor="outlined-adornment-amount">Animals</InputLabel>
-                        <OutlinedInput
-                            label="outline"
-                            id="outlined-adornment-animal"
-                            value={values.animal}
-                            onChange={handleReport('animal')}
-                            aria-describedby="outlined-weight-helper-text"
-                            labelWidth={0}
-                        />
-                    </FormControl>
-                    <FormControl style={{ marginBottom: '20px', width: '40%' }} className={clsx(classy.margin, classy.textField)} variant="outlined">
-                        <InputLabel htmlFor="outlined-adornment-customer">Customers</InputLabel>
-                        <OutlinedInput
-                            label="outline"
-                            id="outlined-adornment-customer"
-                            value={values.amount}
-                            onChange={handleReport('customer')}
-                            aria-describedby="outlined-weight-helper-text"
-                            labelWidth={0}
-                        />
-                    </FormControl>
-                </div>
-                <FormControl style={{ marginBottom: '20px', marginRight: '40px', }} >
-                    <InputLabel id="Activity From" shrink>
-                        Activity date from:
-              </InputLabel>
-                    <Input
-                        labelId="activity-from"
-                        type="date"
-                        onChange={handleReport('activityFrom')}
 
-                    />
-                </FormControl>
-                <FormControl>
-                    <InputLabel id="Activity To" shrink>
-                        Activity date from:
-              </InputLabel>
-                    <Input
-                        labelId="activity-to"
-                        type="date"
-                        onChange={handleReport('activityTo')}
 
-                    />
-                </FormControl>
 
-                <div>
+            <form className="form">
+                <Typography>Delete Animal from the Zoo</Typography>
+                <Grid container spacing={2} style={{ padding: "10px" }}>
 
-                </div>
-            </div>
+
+                    <Grid item>
+                        <FormControl>
+                            <InputLabel id="enclosureName">Enclosure Name</InputLabel>
+                            <Select
+                                labelId="enclosureName"
+                                onChange={formik.handleChange}
+                                name="location"
+                                error={formik.errors.location}
+                                className={classes.select}>
+                                {enclosureNames.map((e, index) => (
+                                    <MenuItem key={index} value={e.location_id}>
+                                        {e.location_name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                            <FormHelperText className={classes.errMessage}>
+                                {formik.errors.location}
+                            </FormHelperText>
+                        </FormControl>
+
+                    </Grid>
+
+                    <Grid item>
+                        <FormControl>
+                            <InputLabel id="enclosureName">Animal Name</InputLabel>
+                            <Select
+                                labelId="enclosureName"
+                                onChange={formik.handleChange}
+                                name="location"
+                                error={formik.errors.location}
+                                className={classes.select}>
+                                {enclosureNames.map((e, index) => (
+                                    <MenuItem key={index} value={e.location_id}>
+                                        {e.location_name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                            <FormHelperText className={classes.errMessage}>
+                                {formik.errors.location}
+                            </FormHelperText>
+                        </FormControl>
+
+                    </Grid>
+
+                    <Grid item>
+                        <Button
+                            variant="outlined"
+                            onClick={formik.handleSubmit}
+                            type="submit">
+                            Delete Animal
+            </Button>
+                    </Grid>
+                </Grid>
+            </form>
         </>
     );
 };
