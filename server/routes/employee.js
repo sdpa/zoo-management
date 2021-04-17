@@ -71,4 +71,36 @@ router.put("/change_work_location", (req, res, next) => {
   );
 });
 
+//Delete employee.
+router.delete("/delete", (req, res, next) => {
+  employee_id = req.employee_id;
+  db.query(
+    "UPDATE employee SET is_active = ? WHERE employee_id = ? ",
+    [false, req.body.employee_id],
+    (err, results) => {
+      if (err) throw err;
+      console.log(resuls);
+      //Get the user_id from the employee that was updated.
+      db.query(
+        "SELECT * FROM employee WHERE employee_id = ? ",
+        [req.body.employee_id],
+        (err, results) => {
+          if (err) throw err;
+          rows = JSON.parse(JSON.stringify(results));
+          let user_id = rows[0].user_id;
+        }
+      );
+      //update the users table to make the user account not active
+      db.query(
+        "UPDATE users SET is_active = ? WHERE employee_id = ? ",
+        [false, user_id],
+        (err, results) => {
+          if (err) throw err;
+          return res.send(200);
+        }
+      );
+    }
+  );
+});
+
 module.exports = router;

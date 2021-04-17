@@ -54,7 +54,8 @@ const AdminDashboard = () => {
 
   const [employees, setEmployees] = useState([]);
 
-  const [openDialog, setOpenDialog] = useState(false);
+  const [deleteDialog, setDeleteDialog] = useState(false);
+  const [editDialog, setEditDialog] = useState(false);
   const [addDialog, setAddDialog] = useState(false);
   const [alertError, setAlertError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -102,6 +103,12 @@ const AdminDashboard = () => {
     getLocations();
   }, []);
 
+  //Edit Dialog functions.
+  const openEditDialog = (employee) => {
+    setCurrentEmployee(employee);
+    setEditDialog(true);
+  };
+
   const handleWorkLocationChange = (e) => {
     let newEmployee = {
       ...currentEmployee,
@@ -110,7 +117,7 @@ const AdminDashboard = () => {
     setCurrentEmployee(newEmployee);
   };
 
-  const handleSave = () => {
+  const handleEditConfirm = () => {
     axios
       .put("/employees/change_work_location", {
         new_location: currentEmployee.work_location,
@@ -118,22 +125,22 @@ const AdminDashboard = () => {
       })
       .then((res) => {
         console.log(res);
-        setOpenDialog(false);
+        setEditDialog(false);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const handleCancel = () => {
-    setOpenDialog(false);
+  const handleEditCancel = () => {
+    setEditDialog(false);
   };
 
-  const handleModalOpen = (employee) => {
-    setCurrentEmployee(employee);
-    setOpenDialog(true);
+  const closeEditDialog = () => {
+    setEditDialog(false);
   };
 
+  //Adding new Employee functions.
   const validate = (values) => {
     let errors = {};
     if (!values.email) {
@@ -199,12 +206,36 @@ const AdminDashboard = () => {
     },
   });
 
-  const handleAddPopuop = () => {
+  const openAddDialog = () => {
     setAddDialog(true);
   };
 
-  const closeAddPopup = () => {
+  const closeAddDialog = () => {
     setAddDialog(false);
+  };
+
+  const openDeleteDialog = (employee) => {
+    setCurrentEmployee(employee);
+    setDeleteDialog(true);
+    console.log(employee);
+  };
+
+  const closeDeleteDialog = () => {
+    setDeleteDialog(false);
+  };
+  const handleDeleteEmployee = () => {
+    // axios
+    //   .delete("/employees/delete", {
+    //     employee_id: employee.employee_id,
+    //   })
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+
+    console.log(currentEmployee);
   };
 
   return (
@@ -222,7 +253,7 @@ const AdminDashboard = () => {
                 alignItems="flex-start"
                 spacing={2}>
                 <Grid item>
-                  <Button variant="contained" onClick={handleAddPopuop}>
+                  <Button variant="contained" onClick={openAddDialog}>
                     Add Employee
                   </Button>
                 </Grid>
@@ -258,11 +289,19 @@ const AdminDashboard = () => {
                             {user.role == "Admin" ? (
                               <TableCell align="right">
                                 <Button
-                                  variant="outlined"
+                                  style={{ marginRight: "10px" }}
+                                  variant="contained"
                                   onClick={() => {
-                                    handleModalOpen(employee);
+                                    openEditDialog(employee);
                                   }}>
                                   Edit
+                                </Button>
+                                <Button
+                                  variant="outlined"
+                                  onClick={() => {
+                                    openDeleteDialog(employee);
+                                  }}>
+                                  Delete
                                 </Button>
                               </TableCell>
                             ) : null}
@@ -274,9 +313,9 @@ const AdminDashboard = () => {
                 </Grid>
               </Grid>
 
-              {/* Modal for changing health status */}
+              {/* Modal for changing work Location */}
               <div>
-                <Dialog open={openDialog}>
+                <Dialog open={editDialog} onClose={closeEditDialog}>
                   <DialogTitle>
                     Change the Work location of {currentEmployee.full_name}
                   </DialogTitle>
@@ -298,13 +337,13 @@ const AdminDashboard = () => {
                   </DialogContent>
                   <DialogActions>
                     <Button
-                      onClick={handleSave}
+                      onClick={handleEditConfirm}
                       variant="contained"
                       color="secondary">
                       Save
                     </Button>
                     <Button
-                      onClick={handleCancel}
+                      onClick={handleEditCancel}
                       variant="contained"
                       color="secondary">
                       CANCEL
@@ -315,7 +354,7 @@ const AdminDashboard = () => {
 
               {/* Modal for adding new employee */}
               <div>
-                <Dialog open={addDialog} onClose={closeAddPopup}>
+                <Dialog open={addDialog} onClose={closeAddDialog}>
                   <DialogTitle>Add New Employee</DialogTitle>
                   <DialogContent>
                     <Grid
@@ -387,12 +426,6 @@ const AdminDashboard = () => {
                           id="work_location"
                           style={{ width: "100%" }}
                           name="work_location"
-                          // value={formik.values.work_location}
-                          // helperText={
-                          //   formik.errors.worK_location !== ""
-                          //     ? formik.errors.worK_location
-                          //     : ""
-                          // }
                           onChange={formik.handleChange}>
                           {locations.map((location) => {
                             return (
@@ -420,10 +453,44 @@ const AdminDashboard = () => {
                       Save
                     </Button>
                     <Button
-                      onClick={closeAddPopup}
+                      onClick={closeAddDialog}
                       variant="contained"
                       color="secondary">
                       CANCEL
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+              </div>
+
+              {/* Modal for deleting employee */}
+              <div>
+                <Dialog open={deleteDialog} onClose={closeDeleteDialog}>
+                  {/* <DialogTitle>Delete Employee</DialogTitle> */}
+                  <DialogContent>
+                    <Grid
+                      container
+                      spacing={1}
+                      direction="column"
+                      className={classes.root}>
+                      <Typography className={classes.formTitle}>
+                        {`Are you sure you want to remove ${currentEmployee.full_name}`}
+                      </Typography>
+                      <Grid item xs={12}></Grid>
+                      <Grid item xs={12}></Grid>
+                    </Grid>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button
+                      onClick={handleDeleteEmployee}
+                      variant="contained"
+                      color="secondary">
+                      YES
+                    </Button>
+                    <Button
+                      onClick={closeDeleteDialog}
+                      variant="contained"
+                      color="secondary">
+                      NO
                     </Button>
                   </DialogActions>
                 </Dialog>

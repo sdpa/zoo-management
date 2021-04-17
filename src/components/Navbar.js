@@ -13,7 +13,7 @@ import Link from "@material-ui/core/Link";
 
 // styling should change a little bit
 function Navbar() {
-  const { user, login, logout } = useContext(UserContext);
+  const { user, logout } = useContext(UserContext);
 
   let { url } = useRouteMatch();
 
@@ -87,7 +87,7 @@ function Navbar() {
               </Button>
               {user.auth ? (
                 <>
-                  {user.role == "Admin" ? (
+                  {user.role === "Admin" ? (
                     <Link href={`/admin_dashboard`}>
                       <Button>Dash Board</Button>
                     </Link>

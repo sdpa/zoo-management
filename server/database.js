@@ -6,6 +6,7 @@ const db = mysql.createConnection({
   user: "admin",
   password: "admin1234",
   database: "zoo_db",
+  acquireTimeout: 1000000,
 });
 
 db.connect((err) => {
