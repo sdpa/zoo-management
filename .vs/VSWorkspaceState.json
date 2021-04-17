@@ -1,9 +1,11 @@
 {
   "ExpandedNodes": [
     "",
+    "\\server",
     "\\src",
+    "\\src\\components",
     "\\src\\images"
   ],
-  "SelectedNode": "\\src\\Home.js",
+  "SelectedNode": "\\src\\components\\EnclosureDetailed.js",
   "PreviewInSolutionExplorer": false
 }
