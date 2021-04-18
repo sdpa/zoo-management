@@ -17,6 +17,8 @@ import {
   DialogTitle,
   Select,
   MenuItem,
+  InputLabel,
+  Input,
 } from "@material-ui/core";
 
 import Table from "@material-ui/core/Table";
@@ -54,6 +56,8 @@ const GiftShopDetailed = ({ match }) => {
 
   const [openDialog, setOpenDialog] = useState(false);
 
+  const [openDialogedit, setOpenDialogedit] = useState(false);
+
   //Modal
   const [currentProduct, setCurrentProduct] = useState({});
 
@@ -64,13 +68,46 @@ const GiftShopDetailed = ({ match }) => {
     setCurrentProduct(product);
     setOpenDialog(true);
   };
+  const handleModalOpenEdit = (product) => {
+    // console.log("Animal", animal);
+    setCurrentProduct(product);
+    setOpenDialogedit(true);
+  };
+
+  const handleModalCloseEdit = () => {
+    setOpenDialogedit(false);
+  };
 
   const handleModalClose = () => {
     setOpenDialog(false);
   };
 
+  const handleCancelEdit = () => {
+    setOpenDialogedit(false);
+  };
+
   const handleCancel = () => {
     setOpenDialog(false);
+  };
+
+  const handleHealthStatusChange = (e) => {
+    setCurrentProduct({
+      ...currentProduct,
+      stock_amount: e.target.value,
+    });
+  };
+
+  const handleSave = () => {
+    axios
+      .put("/merchandise/change_stock", currentProduct)
+      .then((res) => {
+        setOpenDialogedit(false);
+        console.log(res);
+      })
+      .catch((err) => {
+        setOpenDialogedit(true);
+        console.log(err);
+      });
   };
 
   //Get animals in the Enclosure.
@@ -162,6 +199,7 @@ const GiftShopDetailed = ({ match }) => {
                   <TableHead>
                     <TableRow>
                       <TableCell>Product Name </TableCell>
+                      <TableCell align="right">Product Stock</TableCell>
                       <TableCell align="right">Product Price</TableCell>
                       <TableCell align="right">Select Quantity</TableCell>
                       {user.role == "Customer" ? (
@@ -175,7 +213,8 @@ const GiftShopDetailed = ({ match }) => {
                         <TableCell component="th" scope="row">
                           {product.product_name}
                         </TableCell>
-                        <TableCell align="right">{product.price}</TableCell>
+                        <TableCell align="right">{product.stock_amount}</TableCell>
+                        <TableCell align="right">{"$" + product.price}</TableCell>
                         <TableCell align="right">
                           <Select
                             name="quantity_selected"
@@ -205,6 +244,16 @@ const GiftShopDetailed = ({ match }) => {
                             </Button>
                           </TableCell>
                         ) : null}
+                        {user.role == "Admin" ? (
+                        <TableCell align="right">
+                           <Button
+                              variant="outlined"
+                              onClick={() => {
+                                handleModalOpenEdit(product);
+                              }}>
+                              Edit Stock
+                            </Button>
+                        </TableCell>):null}
                       </TableRow>
                     ))}
                   </TableBody>
@@ -228,6 +277,40 @@ const GiftShopDetailed = ({ match }) => {
                     </Button>
                     <Button
                       onClick={handleCancel}
+                      variant="contained"
+                      color="secondary">
+                      CANCEL
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+              </div>
+
+              {/* Modal for changing stock amount */}
+              <div>
+                <Dialog open={openDialogedit}>
+                  <DialogTitle>
+                    Change the Stock of {currentProduct.product_name}
+                  </DialogTitle>
+                  <DialogContent>
+                  <InputLabel htmlFor="amount_spent">
+                    Increase by how much
+                  </InputLabel>
+                    <Input
+                      id="stock_amount"
+                      value={currentProduct.stock_amount}
+                      onChange={handleHealthStatusChange}>
+                      
+                    </Input>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button
+                      onClick={handleSave}
+                      variant="contained"
+                      color="secondary">
+                      Save
+                    </Button>
+                    <Button
+                      onClick={handleCancelEdit}
                       variant="contained"
                       color="secondary">
                       CANCEL
