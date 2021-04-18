@@ -3,14 +3,14 @@ const express = require("express");
 const router = express.Router();
 const db = require("../database");
 
-//Enter a merchandise into zoo
+//Enter a animal into zoo
 router.post("/", (req, res, next) => {
   let body = req.body;
   let animal = {
     species_id: body.species,
     date_arrived: body.date_arrived,
     deceased_date: body.deceased_date,
-    birth_day: body.birth_day,
+    birth_date: body.birth_date,
     location_id: body.location,
     animal_name: body.animal_name,
   };

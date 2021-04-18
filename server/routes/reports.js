@@ -18,20 +18,20 @@ router.post("/employee_report", (req, res, next) => {
     sql = sql + ` AND animals.species_id = ${req.body.species}`;
   }
   if (req.body.health_status) {
-    sql = sql + ` AND animals.health_status = ${req.body.health_status}`;
+    sql = sql + ` AND animals.health_status = "${req.body.health_status}"`;
   }
-  if (req.body.from_date) {
-    sql = sql + ` AND animals.date_arrived >= ${req.body.from_date}`;
+  if (req.body.date_from) {
+    sql = sql + ` AND animals.date_arrived >= "${req.body.date_from}"`;
   }
-  if (req.body.to_date) {
-    sql = sql + ` AND animals.date_arrived <= ${req.body.to_date}`;
+  if (req.body.date_to) {
+    sql = sql + ` AND animals.date_arrived <= "${req.body.date_to}"`;
   }
   db.query(sql, (error, result) => {
     if (error) throw error;
     all_animals = JSON.parse(JSON.stringify(result));
+    // console.log(all_animals);
     return res.send(all_animals);
   });
-  // return res.send(404);
 });
 
 module.exports = router;

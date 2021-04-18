@@ -9,6 +9,13 @@ import {
   Input,
   Grid,
   FormHelperText,
+  TableRow,
+  TableCell,
+  Table,
+  Paper,
+  TableContainer,
+  TableHead,
+  TableBody,
   // Modal,
 } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
@@ -56,11 +63,12 @@ const EmployeeDashboard = () => {
   //Get all the enclosure names:
   const [enclosureNames, setEnclosureNames] = useState([]);
   const [species, setSpecies] = useState([]);
+  const [animals, setAnimals] = useState([]);
 
   const [animal, setAnimal] = useState({
     date_arrived: null,
     deceased_date: null,
-    birth_day: null,
+    birth_date: null,
     location: "",
     animal_name: "",
   });
@@ -106,8 +114,8 @@ const EmployeeDashboard = () => {
     if (!values.date_arrived) {
       errors.date_arrived = "Required";
     }
-    if (!values.birth_day) {
-      errors.birth_day = "Required";
+    if (!values.birth_date) {
+      errors.birth_date = "Required";
     }
     if (!values.species) {
       errors.species = "Required";
@@ -157,7 +165,7 @@ const EmployeeDashboard = () => {
       .post(`/animals`, {
         date_arrived: values.date_arrived,
         deceased_date: values.deceased_date,
-        birth_day: values.birth_day,
+        birth_date: values.birth_date,
         location: values.location,
         animal_name: values.animal_name,
         species: values.species,
@@ -174,7 +182,7 @@ const EmployeeDashboard = () => {
     initialValues: {
       date_arrived: "",
       deceased_date: null,
-      birth_day: "",
+      birth_date: "",
       location: "",
       animal_name: "",
       species: "",
@@ -193,10 +201,11 @@ const EmployeeDashboard = () => {
       health_status: "",
     },
     onSubmit: (values) => {
+      //   console.log(values.date_to);
       axios
         .post("/reports/employee_report", values)
         .then((res) => {
-          console.log(res);
+          setAnimals(res.data);
         })
         .catch((err) => {
           console.log(err);
@@ -273,11 +282,11 @@ const EmployeeDashboard = () => {
                 labelId="dob"
                 type="date"
                 onChange={formik.handleChange}
-                error={formik.errors.birth_day}
-                name="birth_day"
+                error={formik.errors.birth_date}
+                name="birth_date"
               />
               <FormHelperText className={classes.errMessage}>
-                {formik.errors.birth_day}
+                {formik.errors.birth_date}
               </FormHelperText>
             </FormControl>
           </Grid>
@@ -434,6 +443,54 @@ const EmployeeDashboard = () => {
           </Button>
         </div>
       </form>
+
+      {/* Table to display the animals */}
+      <>
+        {
+          animals.length > 0 ? (
+            <>
+              <Typography>{`Report Result`}</Typography>
+              <TableContainer
+                component={Paper}
+                style={{ width: 800, paddingTop: "10px" }}>
+                <Table aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Name </TableCell>
+                      <TableCell align="right">Species</TableCell>
+                      <TableCell align="right">Date of Birth</TableCell>
+                      <TableCell align="right">Date Arrived</TableCell>
+                      <TableCell align="right">Health Status</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {animals.map((animal) => (
+                      <TableRow key={animal.animal_id}>
+                        <TableCell component="th" scope="row">
+                          {animal.animal_name}
+                        </TableCell>
+                        <TableCell align="right">
+                          {animal.species_name}
+                        </TableCell>
+                        <TableCell align="right">
+                          {animal.birth_date.toString().split("T")[0]}
+                        </TableCell>
+                        <TableCell align="right">
+                          {animal.date_arrived.toString().split("T")[0]}
+                        </TableCell>
+                        <TableCell align="right">
+                          {animal.health_status}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </>
+          ) : null
+          //   <Typography style={{ padding: "10px" }}>No Animals</Typography>
+        }
+      </>
     </>
   );
 };
