@@ -26,4 +26,18 @@ router.post("/", (req, res) => {
   });
 });
 
+// retrieve purchase history
+router.get("/history", (req, res) => {
+  
+  let userID = parseInt(req.query.userID);
+  let sql = "SELECT * FROM purchase_history where customer_id=?";
+
+  let response = {};
+  db.query(sql, [userID], (error, result) => {
+    if (error) throw error;
+    response = JSON.parse(JSON.stringify(result));
+    return res.send(response);
+  });
+});
+
 module.exports = router;

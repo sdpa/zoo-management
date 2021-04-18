@@ -36,7 +36,7 @@ function Navbar() {
 
   // needs to go to account page/purchase history when it's created.
   const goToAccountPage = () => {
-    let path = "/";
+    let path = "/history";
     history.push(path);
   };
 

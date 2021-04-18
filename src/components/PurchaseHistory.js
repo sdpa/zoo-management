@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useContext, useEffect } from "react";
 import './PurchaseHistory.css';
 import axios from "axios";
+import { UserContext } from "./UserContext";
 
 //const express = require('express');
 //const bodyParser = require('body-parser');
@@ -16,11 +17,53 @@ const URL = 'database-1.cmkw6xcxraqi.us-east-1.rds.amazonaws.com'
 });*/
 
 const PurchaseHistory = () => {
-    const [customers, setCustomers] = React.useState([])
+    const { user } = useContext(UserContext);
 
+    const [customers, setCustomers] = React.useState([]);
+    const [purchaseHistory, setPurchaseHistory] = useState([]); 
+    const [itemKey, setItemKey] = useState([]); 
+    let id = user.userID;
+
+    const getPurchaseHistory = () => {
+        console.log("getting purchase history...");
+        axios
+            .get(`/purchaseHistory/history`, {
+                params: { userID: id },
+            })
+            .then((res) => {
+                // console.log(res);
+                // console.log(res.data);
+                setPurchaseHistory(res.data); 
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
+    const getItemKey = () => {
+        console.log("getting item_id and product_name");
+        axios
+            .get(`merchandise/all`)
+            .then((res) => {
+                // console.log(res);
+                // console.log(res.data);
+                setItemKey(res.data); 
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+
+    // added sql data
     React.useEffect(() => {
         getData()
+        getPurchaseHistory();
+        getItemKey(); 
     }, [])
+
+    console.log(purchaseHistory); 
+    console.log(itemKey); 
 
     const getData = async () => {
 
@@ -50,6 +93,10 @@ const PurchaseHistory = () => {
             )
         })
     }
+
+      
+
+    
 
     return (
         <>

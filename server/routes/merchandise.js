@@ -17,6 +17,17 @@ router.get("/all_products", (req, res, next) => {
   );
 });
 
+router.get("/all", (req, res) => {
+  db.query(
+    "SELECT * FROM merchandise",
+    (err, results) => {
+      if (err) throw err;
+      rows = JSON.parse(JSON.stringify(results));
+      res.send(rows);
+    }
+  );
+});
+
 //Purchase a product
 router.post("/buy", (req, res, next) => {
   // Check if the stock is more than requested amount.
