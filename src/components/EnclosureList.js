@@ -127,7 +127,7 @@ const EnclosureList = () => {
 
   const getAllEnclosures = () => {
     axios
-      .get(`/locations/all_enclsoures`)
+      .get(`/locations/all_enclosures`)
       .then((res) => {
         console.log(res);
 

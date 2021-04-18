@@ -49,6 +49,18 @@ router.get("/all_gift_shops", (req, res, next) => {
   });
 });
 
+//
+router.get("/all_shops", (req, res, next) => {
+  let sql = "SELECT * FROM locations WHERE location_type !='Enclosure'";
+
+  let response = {};
+  db.query(sql, (error, result) => {
+    if (error) throw error;
+    response = JSON.parse(JSON.stringify(result));
+    return res.send(response);
+  });
+});
+
 //Get location by ID
 router.get("/by_id", (req, res, next) => {
   let location_id = parseInt(req.query.location);

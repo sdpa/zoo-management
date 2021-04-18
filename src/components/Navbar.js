@@ -43,8 +43,11 @@ function Navbar() {
   const goToDashboard = (role) => {
     if (role == "Admin") {
       history.push("/admin_dashboard");
-    } else {
+    } else if(role == "Employee") {
       history.push("/employee_dashboard");
+    }
+    else{
+      history.push("/user_dashboard");
     }
   };
 
@@ -92,9 +95,33 @@ function Navbar() {
                       <Button>Dash Board</Button>
                     </Link>
                   ) : (
+                    null
+                  )}
+                  {user.role === "Employee" ? (
                     <Link href={`/employee_dashboard`}>
                       <Button>Dash Board</Button>
                     </Link>
+                  ) : (
+                    null
+                  )}
+                  {user.role === "Customer" ? (
+                    <Link href={`/user_dashboard`}>
+                      <Button>Dash Board</Button>
+                    </Link>
+                  ) : (
+                    null
+                  )}
+                </>
+              ) : null}
+
+              {user.auth ? (
+                <>
+                  {user.role === "Customer" ? (
+                    <Link href={`/history`}>
+                      <Button>Purchase History</Button>
+                    </Link>
+                  ) : (
+                    null
                   )}
                 </>
               ) : null}
