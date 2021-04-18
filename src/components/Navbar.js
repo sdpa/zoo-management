@@ -113,6 +113,18 @@ function Navbar() {
                   )}
                 </>
               ) : null}
+
+              {user.auth ? (
+                <>
+                  {user.role === "Customer" ? (
+                    <Link href={`/history`}>
+                      <Button>Purchase History</Button>
+                    </Link>
+                  ) : (
+                    null
+                  )}
+                </>
+              ) : null}
             </div>
           )}
         </Toolbar>
