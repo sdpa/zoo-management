@@ -225,7 +225,7 @@ const UserDashboard = () => {
                 }}>Select atleast one item: </Typography>
                 <div>
                 <FormControl>
-                            <InputLabel id="enclosureName">Enclosure Name</InputLabel>
+                            <InputLabel id="enclosureName">Shop Name</InputLabel>
                             <Select
                                 labelId="enclosureName"
                                 onChange={formik.handleChange}

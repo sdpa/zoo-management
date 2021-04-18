@@ -32,6 +32,7 @@ router.post("/buy", (req, res, next) => {
           customer_id: req.body.user_id,
           quantity_purchased: req.body.quantity_selected,
           total_purchase_cost: req.body.amount_due,
+          purchase_time: new Date()
         };
         db.query(
           "INSERT INTO purchase_history SET ? ",
