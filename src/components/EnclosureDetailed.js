@@ -145,7 +145,10 @@ const EnclosureDetailed = ({ match }) => {
                       <TableCell align="right">Species</TableCell>
                       <TableCell align="right">Date of Birth</TableCell>
                       <TableCell align="right">Date Arrived</TableCell>
-                      <TableCell align="right">Health Status</TableCell>
+                      
+                      {user.role == "Employee" ? (
+                        <TableCell align="right">Health Status</TableCell>
+                      ) : null}
                       {user.role == "Employee" ? (
                         <TableCell align="right">Actions</TableCell>
                       ) : null}
@@ -160,13 +163,15 @@ const EnclosureDetailed = ({ match }) => {
                         <TableCell align="right">
                           {animal.species_name}
                         </TableCell>
-                        <TableCell align="right">{animal.birth_date}</TableCell>
+                        <TableCell align="right">{animal.birth_date.toString().split("T")[0]}</TableCell>
                         <TableCell align="right">
-                          {animal.date_arrived}
+                          {animal.date_arrived.toString().split("T")[0]}
+  
                         </TableCell>
+                        {user.role == "Employee" ? (
                         <TableCell align="right">
                           {animal.health_status}
-                        </TableCell>
+                        </TableCell>):null}
                         {user.role == "Employee" ? (
                           <TableCell align="right">
                             <Button
