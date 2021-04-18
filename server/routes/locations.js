@@ -26,7 +26,7 @@ router.get("/", (req, res, next) => {
 });
 
 //Get all enclosures
-router.get("/all_enclsoures", (req, res, next) => {
+router.get("/all_enclosures", (req, res, next) => {
   let sql = "SELECT * FROM locations WHERE location_type='Enclosure'";
 
   let response = {};
@@ -40,6 +40,18 @@ router.get("/all_enclsoures", (req, res, next) => {
 //Get all gift_shops
 router.get("/all_gift_shops", (req, res, next) => {
   let sql = "SELECT * FROM locations WHERE location_type='Gift shop'";
+
+  let response = {};
+  db.query(sql, (error, result) => {
+    if (error) throw error;
+    response = JSON.parse(JSON.stringify(result));
+    return res.send(response);
+  });
+});
+
+//
+router.get("/all_shops", (req, res, next) => {
+  let sql = "SELECT * FROM locations WHERE location_type !='Enclosure'";
 
   let response = {};
   db.query(sql, (error, result) => {

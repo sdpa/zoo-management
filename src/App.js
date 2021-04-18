@@ -14,7 +14,7 @@ import "./App.css";
 import GiftShopList from "./components/GiftShopList";
 import GiftShopDetailed from "./components/GiftShopDetailed";
 import AdminDashboard from "./components/AdminDashboard";
-
+import UserDashboard from "./components/UserDashboard"
 // NEED TO "npm install" @material-ui dependencies
 // npm install @material-ui/core
 // npm install @material-ui/pickers
@@ -62,6 +62,7 @@ function App() {
             component={EmployeeDashboard}
           />
           <Route exact path="/admin_dashboard" component={AdminDashboard} />
+          <Route exact path="/user_dashboard" component={UserDashboard} />
           <Route exact path="/history" component={PurchaseHistory} />
           <Route exact path="/shop" component={GiftShop} />
         </Switch>

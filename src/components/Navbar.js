@@ -43,8 +43,11 @@ function Navbar() {
   const goToDashboard = (role) => {
     if (role == "Admin") {
       history.push("/admin_dashboard");
-    } else {
+    } else if(role == "Employee") {
       history.push("/employee_dashboard");
+    }
+    else{
+      history.push("/user_dashboard");
     }
   };
 
