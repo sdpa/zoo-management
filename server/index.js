@@ -11,6 +11,7 @@ var merchandiseRouter = require("./routes/merchandise");
 var signupRouter = require("./routes/signup");
 var loginRouter = require("./routes/login");
 var employeeRouter = require("./routes/employee");
+var reportsRouter = require("./routes/reports");
 
 const app = express();
 app.use(cors());
@@ -28,6 +29,7 @@ app.use("/animals", animalsRouter);
 app.use("/merchandise", merchandiseRouter);
 app.use("/purchasehistory", purchaseHistoryRouter);
 app.use("/employees", employeeRouter);
+app.use("/reports", reportsRouter);
 
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);

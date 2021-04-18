@@ -26,7 +26,7 @@ router.get("/", (req, res, next) => {
 });
 
 //Get all enclosures
-router.get("/all_enclsoures", (req, res, next) => {
+router.get("/all_enclosures", (req, res, next) => {
   let sql = "SELECT * FROM locations WHERE location_type='Enclosure'";
 
   let response = {};
