@@ -264,7 +264,7 @@ const UserDashboard = () => {
                             </FormHelperText>
                         </FormControl>
                     <FormControl style={{ marginBottom: '20px', width: '40%' }} className={clsx(classy.margin, classy.textField)} variant="outlined">
-                        <InputLabel htmlFor="outlined-adornment-amount">Amount Spent</InputLabel>
+                        <InputLabel htmlFor="outlined-adornment-amount">Purchases above this value</InputLabel>
                         <Input
                                 id="amount_spent"
                                 onChange={formik.handleChange}
