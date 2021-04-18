@@ -43,7 +43,7 @@ router.post("/customer_report", (req, res, next) => {
     date_to: "",
   };
   let sql =
-    "SELECT purchase_history.*, locations.location_name , merchandise.location_sold FROM merchandise,purchase_history,locations  WHERE locations.location_id = merchandise.location_sold AND merchandise.item_id = purchase_history.item_purchased AND purchase_history.customer_id = " +
+    "SELECT purchase_history.*, locations.location_name , merchandise.location_sold, merchandise.product_name FROM merchandise,purchase_history,locations  WHERE locations.location_id = merchandise.location_sold AND merchandise.item_id = purchase_history.item_purchased AND merchandise.item_id = purchase_history.item_purchased AND purchase_history.customer_id = " +
     req.body.customer_id;
 
   if (req.body.shop_name) {

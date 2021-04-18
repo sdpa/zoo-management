@@ -265,7 +265,7 @@ const UserDashboard = () => {
                   <TableHead>
                     <TableRow>
                       <TableCell>Location Bought </TableCell>
-                      
+                      <TableCell align="right">Item(s) Purchased</TableCell>
                       <TableCell align="right">Amount Spent</TableCell>
                       <TableCell align="right">Date Purchased</TableCell>
                     </TableRow>
@@ -273,11 +273,15 @@ const UserDashboard = () => {
                   <TableBody>
                     {animals.map((animal) => (
                       <TableRow key={animal.customer_id}>
+                        
                         <TableCell component="th" scope="row">
                           {animal.location_name}
                         </TableCell>
                         <TableCell align="right">
-                          {animal.total_purchase_cost}
+                          {animal.quantity_purchased + " " + animal.product_name}
+                        </TableCell>
+                        <TableCell align="right">
+                          {"$" + animal.total_purchase_cost}
                         </TableCell>
                         <TableCell align="right">
                           {animal.purchase_time.toString().split("T")[0]}

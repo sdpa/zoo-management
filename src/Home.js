@@ -138,7 +138,7 @@ function Home() {
             <div>
                 <div>
 
-                    <Button component={Link} to="/ticket"
+                    {/* <Button component={Link} to="/ticket"
                         style={{
                             position: 'relative',
                             width: '25%',
@@ -153,7 +153,7 @@ function Home() {
                         ref={anchorRef}
                         onClick={handleToggle}>
                         Ticket
-          </Button>
+          </Button> */}
                     <Button component={Link} to="/enclosure"
                         style={{
                             position: 'relative',
@@ -171,7 +171,7 @@ function Home() {
                         onClick={handleToggle}>
                         Enclosures
           </Button>
-                    <Button component={Link} to="/giftshops"
+                    {/* <Button component={Link} to="/giftshops"
                         style={{
                             position: 'relative',
                             width: '25%',
@@ -187,7 +187,7 @@ function Home() {
                         ref={anchorRef}
                         onClick={handleToggle}>
                         GiftShop
-          </Button>
+          </Button> */}
 
                     <div className={classes.root}>
 
