@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
     // TextField,
     Typography,
@@ -24,6 +24,8 @@ import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { UserContext } from "./UserContext";
+
 const theStyles = makeStyles((theme) => ({
     root: {
         width: '900px',
@@ -52,6 +54,7 @@ const useStyles = makeStyles({
 
 const UserDashboard = () => {
     const classes = useStyles();
+    const { user } = useContext(UserContext);
 
     //Get all the enclosure names:
     const [enclosureNames, setEnclosureNames] = useState([]);
@@ -104,6 +107,14 @@ const UserDashboard = () => {
         }
         return errors;
     };
+
+    const validateReport = (values) => {
+      let errors = {};
+      if (Number.isInteger(Number(values.amount_spent))) {
+          errors.amount_spent = "Must be a valid number";
+      }
+      return errors;
+  };
     const [values, setValues] = useState({
         investigator: '',
         checked: true,
@@ -166,13 +177,15 @@ const UserDashboard = () => {
       initialValues: {
         date_from: "",
         date_to: "",
-        species: "",
-        health_status: "",
+        shop_name: "",
+        amount_spent: "",
+        customer_id: user.userID,
       },
+      validateReport,
       onSubmit: (values) => {
         //   console.log(values.date_to);
         axios
-          .post("/reports/employee_report", values)
+          .post("/reports/customer_report", values)
           .then((res) => {
             setAnimals(res.data);
           })
@@ -246,7 +259,7 @@ const UserDashboard = () => {
                 }}>Select atleast one item: </Typography>
                 <div>
                 <FormControl>
-                            <InputLabel id="enclosureName">Enclosure Name</InputLabel>
+                            <InputLabel id="enclosureName">Shop Name</InputLabel>
                             <Select
                                 labelId="enclosureName"
                                 onChange={formik.handleChange}
@@ -267,10 +280,15 @@ const UserDashboard = () => {
                         <InputLabel htmlFor="outlined-adornment-amount">Purchases above this value</InputLabel>
                         <Input
                                 id="amount_spent"
-                                onChange={formik.handleChange}
+                                onChange={reportForm.handleChange}                                
                                 name="amount_spent"
-                                error={formik.errors.amount_spent}
+                                
+                                error={reportForm.errors.amount_spent}
                             />
+                          <FormHelperText className={classes.errMessage}>
+                              {reportForm.errors.amount_spent}
+                            </FormHelperText>
+
                     </FormControl>
                 </div>
                 <div>
@@ -302,8 +320,8 @@ const UserDashboard = () => {
 
                 <div>
                 <Button variant="contained" onClick={reportForm.handleSubmit}>
-            Get Report
-          </Button>
+                  Get Report
+                </Button>
 
                 </div>
             </div>
