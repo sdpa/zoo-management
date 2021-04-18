@@ -201,7 +201,7 @@ const EmployeeDashboard = () => {
       health_status: "",
     },
     onSubmit: (values) => {
-      //   console.log(values.date_to);
+      // console.log(values);
       axios
         .post("/reports/employee_report", values)
         .then((res) => {
@@ -335,7 +335,7 @@ const EmployeeDashboard = () => {
                 fontSize: "22px",
                 fontWeight: "bold",
               }}>
-              Activity Report{"\n"}
+             
             </Typography>
           </div>
           <div>
@@ -344,31 +344,10 @@ const EmployeeDashboard = () => {
               style={{ marginBottom: "20px", width: "40%" }}
               className={clsx(classy.margin, classy.textField)}
               variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-amount">
-                Investigator
-              </InputLabel>
-              <OutlinedInput
-                id="outline"
-                label="name"
-                value={values.investigtor}
-                onChange={reportForm.handleChange}
-                aria-describedby="outlined-weight-helper-text"
-                labelWidth={0}
-              />
+              
             </FormControl>
 
-            <FormControlLabel
-              padding="30px"
-              control={
-                <Checkbox
-                  checked={values.checked}
-                  onChange={handlecheck}
-                  name="checked"
-                  color="primary"
-                />
-              }
-              label="Include Inactive Employees or something"
-            />
+            
           </div>
 
           <Typography

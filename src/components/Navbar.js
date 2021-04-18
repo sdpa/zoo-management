@@ -40,6 +40,21 @@ function Navbar() {
     history.push(path);
   };
 
+  const goToTicketPage = (role) => {
+    if(role){
+      let path = "/ticket";
+      history.push(path);
+    }
+  };
+
+  const goToGiftShop = (role) => {
+    if(role){
+      let path = "/giftshops";
+      history.push(path);
+    }
+    
+  };
+
   const goToDashboard = (role) => {
     if (role == "Admin") {
       history.push("/admin_dashboard");
@@ -119,6 +134,20 @@ function Navbar() {
                   {user.role === "Customer" ? (
                     <Link href={`/history`}>
                       <Button>Purchase History</Button>
+                    </Link>
+                  ) : (
+                    null
+                  )}
+                  {user.role === "Customer" ? (
+                    <Link href={`/giftshops`}>
+                      <Button>Gift Shop</Button>
+                    </Link>
+                  ) : (
+                    null
+                  )}
+                  {user.role === "Customer" ? (
+                    <Link href={`/ticket`}>
+                      <Button>Buy Tickets</Button>
                     </Link>
                   ) : (
                     null

@@ -9,6 +9,13 @@ import {
   Input,
   Grid,
   FormHelperText,
+  TableCell,
+  TableRow,
+  TableBody,
+  TableHead,
+  Table,
+  TableContainer,
+  Paper,
   // Modal,
 } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
@@ -127,14 +134,15 @@ const UserDashboard = () => {
     validate,
     onSubmit: (values) => {
       console.log(values);
-      //   axios
-      //     .post("/reports/customer_report", values)
-      //     .then((res) => {
-      //       setAnimals(res.data);
-      //     })
-      //     .catch((err) => {
-      //       console.log(err);
-      //     });
+        axios
+          .post("/reports/customer_report", values)
+          .then((res) => {
+            console.log(res.data);
+            setAnimals(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
     },
   });
   const classy = theStyles();
@@ -156,7 +164,7 @@ const UserDashboard = () => {
               fontSize: "22px",
               fontWeight: "bold",
             }}>
-            Activity Report{"\n"}
+            
           </Typography>
         </div>
         <div>
@@ -165,31 +173,9 @@ const UserDashboard = () => {
             style={{ marginBottom: "20px", width: "40%" }}
             className={clsx(classy.margin, classy.textField)}
             variant="outlined">
-            <InputLabel htmlFor="outlined-adornment-amount">
-              Investigator
-            </InputLabel>
-            <OutlinedInput
-              id="outline"
-              label="name"
-              value={values.investigtor}
-              onChange={reportForm.handleChange}
-              aria-describedby="outlined-weight-helper-text"
-              labelWidth={0}
-            />
+            
+            
           </FormControl>
-
-          <FormControlLabel
-            padding="30px"
-            control={
-              <Checkbox
-                checked={values.checked}
-                onChange={handlecheck}
-                name="checked"
-                color="primary"
-              />
-            }
-            label="Include Inactive Employees or something"
-          />
         </div>
 
         <Typography
@@ -238,32 +224,83 @@ const UserDashboard = () => {
         </div>
         <div></div>
         <FormControl style={{ marginBottom: "20px", marginRight: "40px" }}>
-          <InputLabel id="Activity From" shrink>
-            Activity date from:
-          </InputLabel>
-          <Input
-            labelId="activity-from"
-            type="date"
-            onChange={reportForm.handleChange}
-          />
-        </FormControl>
-        <FormControl>
-          <InputLabel id="Activity To" shrink>
-            Activity date from:
-          </InputLabel>
-          <Input
-            labelId="activity-to"
-            type="date"
-            onChange={reportForm.handleChange}
-          />
-        </FormControl>
-
-        <div>
+            <InputLabel id="date_from" shrink>
+              Date From:
+            </InputLabel>
+            <Input
+              labelId="activity-from"
+              name="date_from"
+              type="date"
+              onChange={reportForm.handleChange}
+            />
+          </FormControl>
+          <FormControl>
+            <InputLabel id="date_to" shrink>
+              Date To:
+            </InputLabel>
+            <Input
+              labelId="activity-to"
+              name="date_to"
+              type="date"
+              onChange={reportForm.handleChange}
+            />
+          </FormControl>
           <Button variant="contained" onClick={reportForm.handleSubmit}>
             Get Report
           </Button>
-        </div>
+
       </div>
+      
+
+      {/* Table to display the animals */}
+      <>
+        {
+          animals.length > 0 ? (
+            <>
+              <Typography>{`Report Result`}</Typography>
+              <TableContainer
+                component={Paper}
+                style={{ width: 800, paddingTop: "10px" }}>
+                <Table aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Location Bought </TableCell>
+                      <TableCell align="right">Item(s) Purchased</TableCell>
+                      <TableCell align="right">Amount Spent</TableCell>
+                      <TableCell align="right">Date Purchased</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {animals.map((animal) => (
+                      <TableRow key={animal.customer_id}>
+                        
+                        <TableCell component="th" scope="row">
+                          {animal.location_name}
+                        </TableCell>
+                        <TableCell align="right">
+                          {animal.quantity_purchased + " " + animal.product_name}
+                        </TableCell>
+                        <TableCell align="right">
+                          {"$" + animal.total_purchase_cost}
+                        </TableCell>
+                        <TableCell align="right">
+                          {animal.purchase_time.toString().split("T")[0]}
+                        </TableCell>
+                    
+                        {/* <TableCell align="right">
+                          {animal.health_status}
+                        </TableCell> */}
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </>
+          ) : null
+          //   <Typography style={{ padding: "10px" }}>No Animals</Typography>
+        }
+      </>
+
     </>
   );
 };
