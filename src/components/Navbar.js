@@ -95,9 +95,21 @@ function Navbar() {
                       <Button>Dash Board</Button>
                     </Link>
                   ) : (
+                    null
+                  )}
+                  {user.role === "Employee" ? (
                     <Link href={`/employee_dashboard`}>
                       <Button>Dash Board</Button>
                     </Link>
+                  ) : (
+                    null
+                  )}
+                  {user.role === "Customer" ? (
+                    <Link href={`/user_dashboard`}>
+                      <Button>Dash Board</Button>
+                    </Link>
+                  ) : (
+                    null
                   )}
                 </>
               ) : null}

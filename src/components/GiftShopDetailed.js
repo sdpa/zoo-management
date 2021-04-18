@@ -163,7 +163,7 @@ const GiftShopDetailed = ({ match }) => {
                     <TableRow>
                       <TableCell>Product Name </TableCell>
                       <TableCell align="right">Product Price</TableCell>
-                      <TableCell align="right">Select Quntity</TableCell>
+                      <TableCell align="right">Select Quantity</TableCell>
                       {user.role == "Customer" ? (
                         <TableCell align="right">Actions</TableCell>
                       ) : null}
