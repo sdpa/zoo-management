@@ -53,6 +53,7 @@ const useStyles = makeStyles({
 const UserDashboard = () => {
   const classes = useStyles();
 
+  const classy = theStyles();
   //Get all the enclosure names:
   const [enclosureNames, setEnclosureNames] = useState([]);
   const [species, setSpecies] = useState([]);
@@ -158,21 +159,11 @@ const UserDashboard = () => {
   };
 
   const formik = useFormik({
-    initialValues: {
-      date_arrived: "",
-      deceased_date: null,
-      birth_date: "",
-      location: "",
-      animal_name: "",
-      species: "",
-      amount_spent: "",
-    },
-    validate,
-    onSubmit: (values) => {
-      handleSubmit(values);
+    initialValues: {},
+    onSumbit: (values) => {
+      console.log(values);
     },
   });
-  const classy = theStyles();
 
   return (
     <>
@@ -234,9 +225,10 @@ const UserDashboard = () => {
           }}>
           Select atleast one item:{" "}
         </Typography>
+
         <div>
           <FormControl>
-            <InputLabel id="enclosureName">Enclosure Name</InputLabel>
+            <InputLabel id="enclosureName">Shop Name</InputLabel>
             <Select
               labelId="enclosureName"
               onChange={formik.handleChange}
@@ -268,7 +260,6 @@ const UserDashboard = () => {
             />
           </FormControl>
         </div>
-        <div></div>
         <FormControl style={{ marginBottom: "20px", marginRight: "40px" }}>
           <InputLabel id="Activity From" shrink>
             Activity date from:
@@ -279,18 +270,124 @@ const UserDashboard = () => {
             onChange={handleReport("activityFrom")}
           />
         </FormControl>
-        <FormControl>
-          <InputLabel id="Activity To" shrink>
-            Activity date from:
-          </InputLabel>
-          <Input
-            labelId="activity-to"
-            type="date"
-            onChange={handleReport("activityTo")}
-          />
-        </FormControl>
 
-        <div></div>
+        <div className={classy.root} noValidate autoComplete="off">
+          <div>
+            <Typography
+              style={{
+                align: "middle",
+                fontSize: "32px",
+              }}>
+              Report Request
+            </Typography>
+            <Typography
+              align="left"
+              style={{
+                fontSize: "22px",
+                fontWeight: "bold",
+              }}>
+              Activity Report{"\n"}
+            </Typography>
+          </div>
+          <div>
+            <FormControl
+              spacing={2}
+              style={{ marginBottom: "20px", width: "40%" }}
+              className={clsx(classy.margin, classy.textField)}
+              variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-amount">
+                Investigator
+              </InputLabel>
+              <OutlinedInput
+                id="outline"
+                label="name"
+                value={values.investigtor}
+                onChange={handleReport("investigator")}
+                aria-describedby="outlined-weight-helper-text"
+                labelWidth={0}
+              />
+            </FormControl>
+
+            <FormControlLabel
+              padding="30px"
+              control={
+                <Checkbox
+                  checked={values.checked}
+                  onChange={handlecheck}
+                  name="checked"
+                  color="primary"
+                />
+              }
+              label="Include Inactive Employees or something"
+            />
+          </div>
+
+          <Typography
+            align="left"
+            style={{
+              fontSize: "18px",
+            }}>
+            Select atleast one item:{" "}
+          </Typography>
+          <div>
+            <FormControl>
+              <InputLabel id="enclosureName">Enclosure Name</InputLabel>
+              <Select
+                labelId="enclosureName"
+                onChange={formik.handleChange}
+                name="location"
+                error={formik.errors.location}
+                className={classes.select}>
+                {enclosureNames.map((e, index) => (
+                  <MenuItem key={index} value={e.location_id}>
+                    {e.location_name}
+                  </MenuItem>
+                ))}
+              </Select>
+              <FormHelperText className={classes.errMessage}>
+                {formik.errors.location}
+              </FormHelperText>
+            </FormControl>
+            <FormControl
+              style={{ marginBottom: "20px", width: "40%" }}
+              className={clsx(classy.margin, classy.textField)}
+              variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-amount">
+                Amount Spent
+              </InputLabel>
+              <Input
+                id="amount_spent"
+                onChange={formik.handleChange}
+                name="amount_spent"
+                error={formik.errors.amount_spent}
+              />
+            </FormControl>
+          </div>
+          <FormControl style={{ marginBottom: "20px", marginRight: "40px" }}>
+            <InputLabel id="Activity From" shrink>
+              Activity date from:
+            </InputLabel>
+            <Input
+              labelId="activity-from"
+              type="date"
+              onChange={() => {
+                handleReport("activityTo");
+              }}
+            />
+          </FormControl>
+          <FormControl>
+            <InputLabel id="Activity To" shrink>
+              Activity date from:
+            </InputLabel>
+            <Input
+              labelId="activity-to"
+              type="date"
+              onChange={() => {
+                handleReport("activityTo");
+              }}
+            />
+          </FormControl>
+        </div>
       </div>
     </>
   );
