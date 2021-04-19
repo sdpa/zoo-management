@@ -75,31 +75,33 @@ router.put("/change_health", (req, res, next) => {
     }
   );
 });
-router.delete("/delete", (req, res, next) => {
-    animal_id = req.animal_id;
+router.delete("/delete/:id", (req, res, next) => {
+    let animal_id = req.params.id;
+    console.log(animal_id);
+    console.log(req.params);
+    console.log(req.body);
     db.query(
-        "UPDATE animals SET is_active = ? WHERE animal_id = ? ",
-        [false, req.body.animal_id],
+        "UPDATE animal SET is_active = ? WHERE animal_id = ? ",
+        [false, animal_id],
         (err, results) => {
             if (err) throw err;
-            console.log(resuls);
-            //Get the user_id from the employee that was updated.
+            console.log(results);
             db.query(
-                "SELECT * FROM animals WHERE animal_id = ? ",
-                [req.body.animal_id],
+                "SELECT * FROM animal WHERE animal_id = ? ",
+                [animal_id],
                 (err, results) => {
                     if (err) throw err;
                     rows = JSON.parse(JSON.stringify(results));
+                    console.log("rows: ", rows);
                     let user_id = rows[0].user_id;
-                }
-            );
-            //update the users table to make the user account not active
-            db.query(
-                "UPDATE users SET is_active = ? WHERE animal_id = ? ",
-                [false, user_id],
-                (err, results) => {
-                    if (err) throw err;
-                    return res.send(200);
+                    db.query(
+                        "UPDATE users SET is_active = ? WHERE user_id = ? ",
+                        [false, user_id],
+                        (err, results) => {
+                            if (err) throw err;
+                            return res.send(200);
+                        }
+                    );
                 }
             );
         }
