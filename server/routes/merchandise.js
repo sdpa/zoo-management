@@ -70,4 +70,51 @@ router.post("/buy", (req, res, next) => {
   );
 });
 
+router.put("/change_stock", (req, res, next) => {
+  //Get animal from database
+  db.query(
+    "SELECT * FROM merchandise WHERE item_id = ? ",
+    [req.body.item_id],
+    (err, results) => {
+      if (err) throw err;
+      item = JSON.parse(JSON.stringify(results))[0];
+      let current_stock = item.stock_amount;
+      let new_stock = parseInt(req.body.stock_amount) + parseInt(current_stock);
+
+      db.query(
+        "UPDATE merchandise SET ? where item_id = ? ",
+        [{ stock_amount: new_stock }, req.body.item_id],
+        (err, result) => {
+          if (err) throw err;
+          return res.send(200);
+        }
+      );
+    }
+  );
+});
+
+
+//Enter an item into gift shop
+router.post("/additem", (req, res, next) => {
+  let body = req.body;
+  let item = {
+    stock_amount: body.stock_amount,
+    price: body.price,
+    product_name: body.product_name,
+    location_sold: body.location_sold,
+  };
+
+  console.log(req.body);
+
+  let sql = "INSERT INTO merchandise SET ?";
+
+  let response = {};
+  db.query(sql, item, (error, result) => {
+    if (error) throw error;
+    response = JSON.parse(JSON.stringify(result));
+    return res.send(response);
+  });
+  //   return res.send(200);
+});
+
 module.exports = router;

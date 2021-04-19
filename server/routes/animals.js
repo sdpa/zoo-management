@@ -75,5 +75,34 @@ router.put("/change_health", (req, res, next) => {
     }
   );
 });
-
+router.delete("/delete", (req, res, next) => {
+    animal_id = req.animal_id;
+    db.query(
+        "UPDATE animals SET is_active = ? WHERE animal_id = ? ",
+        [false, req.body.animal_id],
+        (err, results) => {
+            if (err) throw err;
+            console.log(resuls);
+            //Get the user_id from the employee that was updated.
+            db.query(
+                "SELECT * FROM animals WHERE animal_id = ? ",
+                [req.body.animal_id],
+                (err, results) => {
+                    if (err) throw err;
+                    rows = JSON.parse(JSON.stringify(results));
+                    let user_id = rows[0].user_id;
+                }
+            );
+            //update the users table to make the user account not active
+            db.query(
+                "UPDATE users SET is_active = ? WHERE animal_id = ? ",
+                [false, user_id],
+                (err, results) => {
+                    if (err) throw err;
+                    return res.send(200);
+                }
+            );
+        }
+    );
+});
 module.exports = router;
