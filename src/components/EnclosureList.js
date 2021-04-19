@@ -272,12 +272,6 @@ const EnclosureList = () => {
                   name="location_name"
                   variant="outlined"
                   style={{ width: "100%" }}
-                  // error={formik.errors.full_name}
-                  // helperText={
-                  //   formik.errors.full_name !== ""
-                  //     ? formik.errors.full_name
-                  //     : ""
-                  // }
                 />
               </Grid>
               <Grid item xs={12}>

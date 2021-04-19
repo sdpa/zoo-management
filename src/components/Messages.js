@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from "react";
 import { UserContext } from "./UserContext";
-import { Typography, Snackbar, IconButton } from "@material-ui/core";
+import { Typography, Snackbar, IconButton, Button } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import axios from "axios";
 import Alert from "@material-ui/lab/Alert";
@@ -24,34 +24,37 @@ const Messages = () => {
       });
   }, []);
 
-  const deleteMessage = (e, id) => {
-    console.log(id);
-    // axios.delete("/delete", message).then(res => {
-    //     console.log(res.data);
-    // }).catch(err => {
-    //     console.log(err);
-    // })
+  const deleteMessage = (message) => {
+    console.log(message);
+    axios
+      .delete(`/messages/delete/${message.message_id}`, message)
+      .then((res) => {
+        let new_messages = messages.filter(
+          (mes) => mes.message_id != message.message_id
+        );
+        console.log("New messages: ", new_messages);
+        setMessages(new_messages);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
-  const [currentImage, setCurrentMessage] = useState(false);
 
   return (
     <>
       {messages.length > 0 ? (
-        <>
-          {messages.map((mes, index) => {
-            return (
-              <div
-                key={index}
-                onClick={(e, mes) => {
-                  setCurrentMessage(mes);
-                  console.log(mes);
-                  console.log("stuff");
-                }}>
-                {mes.message}
-              </div>
-            );
-          })}
-        </>
+        <div style={{ width: "50%" }}>
+          {messages.map((mes) => (
+            <Alert
+              key={mes.message_id}
+              onClose={() => {
+                deleteMessage(mes);
+              }}>
+              {mes.message}
+            </Alert>
+          ))}
+        </div>
       ) : (
         <Typography>No Messages</Typography>
       )}
