@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  Typography,
   Select,
   MenuItem,
   InputLabel,
@@ -19,17 +18,10 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
-import Alert from "@material-ui/lab/Alert";
 
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
-
-import { useHistory } from "react-router-dom";
-
-import { UserContext } from "./UserContext";
-
 import { useFormik } from "formik";
-import { shopsearching } from "@material-ui/icons";
 
 const theStyles = makeStyles((theme) => ({
   root: {

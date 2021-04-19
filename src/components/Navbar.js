@@ -41,27 +41,25 @@ function Navbar() {
   };
 
   const goToTicketPage = (role) => {
-    if(role){
+    if (role) {
       let path = "/ticket";
       history.push(path);
     }
   };
 
   const goToGiftShop = (role) => {
-    if(role){
+    if (role) {
       let path = "/giftshops";
       history.push(path);
     }
-    
   };
 
   const goToDashboard = (role) => {
     if (role == "Admin") {
       history.push("/admin_dashboard");
-    } else if(role == "Employee") {
+    } else if (role == "Employee") {
       history.push("/employee_dashboard");
-    }
-    else{
+    } else {
       history.push("/user_dashboard");
     }
   };
@@ -109,23 +107,22 @@ function Navbar() {
                     <Link href={`/admin_dashboard`}>
                       <Button>Dash Board</Button>
                     </Link>
-                  ) : (
-                    null
-                  )}
+                  ) : null}
                   {user.role === "Employee" ? (
-                    <Link href={`/employee_dashboard`}>
-                      <Button>Dash Board</Button>
-                    </Link>
-                  ) : (
-                    null
-                  )}
+                    <>
+                      <Link href={`/employee_dashboard`}>
+                        <Button>Dash Board</Button>
+                      </Link>
+                      <Link href={`/messages`}>
+                        <Button>Messages</Button>
+                      </Link>
+                    </>
+                  ) : null}
                   {user.role === "Customer" ? (
                     <Link href={`/user_dashboard`}>
                       <Button>Dash Board</Button>
                     </Link>
-                  ) : (
-                    null
-                  )}
+                  ) : null}
                 </>
               ) : null}
 
@@ -135,23 +132,17 @@ function Navbar() {
                     <Link href={`/history`}>
                       <Button>Purchase History</Button>
                     </Link>
-                  ) : (
-                    null
-                  )}
+                  ) : null}
                   {user.role === "Customer" ? (
                     <Link href={`/giftshops`}>
                       <Button>Gift Shop</Button>
                     </Link>
-                  ) : (
-                    null
-                  )}
+                  ) : null}
                   {user.role === "Customer" ? (
                     <Link href={`/ticket`}>
                       <Button>Buy Tickets</Button>
                     </Link>
-                  ) : (
-                    null
-                  )}
+                  ) : null}
                 </>
               ) : null}
             </div>

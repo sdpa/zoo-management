@@ -227,18 +227,16 @@ const AdminEmployeeSection = () => {
     setDeleteDialog(false);
   };
   const handleDeleteEmployee = () => {
-    // axios
-    //   .delete("/employees/delete", {
-    //     employee_id: employee.employee_id,
-    //   })
-    //   .then((res) => {
-    //     console.log(res);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    axios
+      .delete(`/employees/delete/${currentEmployee.employee_id}`)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
-    console.log(currentEmployee);
+    // console.log(currentEmployee);
   };
 
   return (
