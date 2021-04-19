@@ -93,4 +93,28 @@ router.put("/change_stock", (req, res, next) => {
   );
 });
 
+
+//Enter an item into gift shop
+router.post("/additem", (req, res, next) => {
+  let body = req.body;
+  let item = {
+    stock_amount: body.stock_amount,
+    price: body.price,
+    product_name: body.product_name,
+    location_sold: body.location_sold,
+  };
+
+  console.log(req.body);
+
+  let sql = "INSERT INTO merchandise SET ?";
+
+  let response = {};
+  db.query(sql, item, (error, result) => {
+    if (error) throw error;
+    response = JSON.parse(JSON.stringify(result));
+    return res.send(response);
+  });
+  //   return res.send(200);
+});
+
 module.exports = router;

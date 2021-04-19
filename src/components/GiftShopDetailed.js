@@ -19,6 +19,8 @@ import {
   MenuItem,
   InputLabel,
   Input,
+  TextField,
+  FormHelperText,
 } from "@material-ui/core";
 
 import Table from "@material-ui/core/Table";
@@ -36,6 +38,18 @@ import { useHistory } from "react-router-dom";
 
 import { UserContext } from "./UserContext";
 import { CloudQueueRounded, LensOutlined } from "@material-ui/icons";
+import Alert from "@material-ui/lab/Alert";
+import { useFormik } from "formik";
+
+
+const useStyles = makeStyles({
+  select: {
+    minWidth: 150,
+  },
+  errMessage: {
+    color: "red",
+  },
+});
 
 const GiftShopDetailed = ({ match }) => {
   // console.log(match);
@@ -47,6 +61,7 @@ const GiftShopDetailed = ({ match }) => {
   });
 
   console.log(quantities);
+  const classes = useStyles();
 
   const { user } = useContext(UserContext);
 
@@ -58,10 +73,14 @@ const GiftShopDetailed = ({ match }) => {
 
   const [openDialogedit, setOpenDialogedit] = useState(false);
 
+  const [addDialog, setAddDialog] = useState(false);
+
   //Modal
   const [currentProduct, setCurrentProduct] = useState({});
 
   const [open, setOpen] = useState(false);
+
+  const [alertError, setAlertError] = useState(null);
 
   const handleModalOpen = (product) => {
     // console.log("Animal", animal);
@@ -96,6 +115,91 @@ const GiftShopDetailed = ({ match }) => {
       stock_amount: e.target.value,
     });
   };
+
+  // const [errors, setErrors] = useState({
+  //   email: "",
+  //   password: "",
+  // });
+
+  const validate = (values) => {
+    let errors = {};
+    if (!values.stock_amount) {
+      errors.stock_amount = "Required";
+    } //else if (
+    //   !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
+    // ) {
+    //   errors.email = "Invalid email address";
+    // } else if (values.email.length > 25) {
+    //   errors.email = "Max 25 characters";
+    // }
+    // if (values.password.length < 4) {
+    //   errors.password = "Minimum 4 characters";
+    // }
+    if (values.price == "") {
+      errors.price = "Required";
+    }
+    if (values.product_name == "") {
+      errors.product_name = "Required";
+    }
+    
+    // if (values.worK_location == "") {
+    //   errors.work_location = "Required";
+    // }
+    return errors;
+  };
+
+  const handleCreateEmployee = (values) => {
+    axios
+      .post("/merchandise/additem", {
+        stock_amount: values.stock_amount,
+        price: values.price,
+        product_name: values.product_name,
+        location_sold: 24,
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        //Log In failed.
+        console.log(err.response);
+        console.log("Errors: ", err.response.data);
+        let errors_response = err.response.data.errors;
+        // let new_errors = { email: "", password: "" };
+        // if (Array.isArray(errors_response)) {
+        //   errors_response.forEach((error) => {
+        //     new_errors[error.param] = error.msg;
+        //   });
+        //   setErrors(new_errors);
+        // } else {
+        //   setAlertError(err.response.data.error);
+        // }
+      });
+  };
+
+  const closeAddDialog = () => {
+    setAddDialog(false);
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      stock_amount: "",
+      price: "",
+      product_name: "",
+      location_sold: 24,
+    },
+    validate,
+    onSubmit: (values) => {
+      handleCreateEmployee(values);
+      setAddDialog(false);
+    },
+  });
+
+  const openAddDialog = () => {
+    setAddDialog(true);
+  };
+
+  
+
 
   const handleSave = () => {
     axios
@@ -191,7 +295,14 @@ const GiftShopDetailed = ({ match }) => {
         <>
           {products.length > 0 ? (
             <>
+            
+                
               <Typography>{`Products in ${giftShop.location_name} Enclosure`}</Typography>
+              <Grid item>
+                  <Button variant="contained" onClick={openAddDialog}>
+                    Add Item
+                  </Button>
+                </Grid>
               <TableContainer
                 component={Paper}
                 style={{ width: 800, paddingTop: "10px" }}>
@@ -201,7 +312,11 @@ const GiftShopDetailed = ({ match }) => {
                       <TableCell>Product Name </TableCell>
                       <TableCell align="right">Product Stock</TableCell>
                       <TableCell align="right">Product Price</TableCell>
-                      <TableCell align="right">Select Quantity</TableCell>
+
+                      {user.role == "Customer" ? (
+                          <TableCell align="right">Select Quantity</TableCell>
+                        ) : null}
+                      
                       {user.role == "Customer" ? (
                         <TableCell align="right">Actions</TableCell>
                       ) : null}
@@ -215,7 +330,9 @@ const GiftShopDetailed = ({ match }) => {
                         </TableCell>
                         <TableCell align="right">{product.stock_amount}</TableCell>
                         <TableCell align="right">{"$" + product.price}</TableCell>
-                        <TableCell align="right">
+
+                        {user.role == "Customer" ? (
+                          <TableCell align="right">
                           <Select
                             name="quantity_selected"
                             style={{ width: "75px" }}
@@ -232,6 +349,9 @@ const GiftShopDetailed = ({ match }) => {
                             })}
                           </Select>
                         </TableCell>
+                        ) : null}
+
+                        
                         {user.role == "Customer" ? (
                           <TableCell align="right">
                             <Button
@@ -277,6 +397,94 @@ const GiftShopDetailed = ({ match }) => {
                     </Button>
                     <Button
                       onClick={handleCancel}
+                      variant="contained"
+                      color="secondary">
+                      CANCEL
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+              </div>
+
+              {/* Modal for adding new item to gift shop */}
+              <div>
+                <Dialog open={addDialog} onClose={closeAddDialog}>
+                  <DialogTitle>Add New Item</DialogTitle>
+                  <DialogContent>
+                    <Grid
+                      container
+                      spacing={1}
+                      direction="column"
+                      className={classes.root}>
+                      <Typography className={classes.formTitle}>
+                        Add New Item
+                      </Typography>
+                      {alertError ? (
+                        <Alert
+                          severity="error"
+                          style={{ paddingBottom: "10px" }}>
+                          {alertError}
+                        </Alert>
+                      ) : null}
+                      <Grid item xs={12}>
+                        <TextField
+                          label="Stock Amount"
+                          id="stock_amount"
+                          onChange={formik.handleChange}
+                          name="stock_amount"
+                          variant="outlined"
+                          style={{ width: "100%" }}
+                          // error={formik.errors.full_name}
+                          // helperText={
+                          //   formik.errors.full_name !== ""
+                          //     ? formik.errors.full_name
+                          //     : ""
+                          // }
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          label="Price"
+                          id="email"
+                          onChange={formik.handleChange}
+                          name="price"
+                          variant="outlined"
+                          style={{ width: "100%" }}
+                          // error={formik.errors.email}
+                          // helperText={
+                          //   formik.errors.email !== ""
+                          //     ? formik.errors.email
+                          //     : ""
+                          // }
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          label="Product Name"
+                          id="product_name"
+                          name="product_name"
+                          onChange={formik.handleChange}
+                          variant="outlined"
+                          style={{ width: "100%" }}
+                          // error={formik.errors.password}
+                          // helperText={
+                          //   formik.errors.password !== ""
+                          //     ? formik.errors.password
+                          //     : ""
+                          // }
+                        />
+                      </Grid>
+                      
+                    </Grid>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button
+                      onClick={formik.handleSubmit}
+                      variant="contained"
+                      color="secondary">
+                      Save
+                    </Button>
+                    <Button
+                      onClick={closeAddDialog}
                       variant="contained"
                       color="secondary">
                       CANCEL

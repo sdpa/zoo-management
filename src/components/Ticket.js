@@ -199,18 +199,18 @@ function Ticket() {
                 );
                 if (adultTicketCount > 0) {
                   handleSubmit(
-                    new dbInfoForTickets(1, adultTicketCount, 10, selectedDate)
+                    new dbInfoForTickets(8, adultTicketCount, 10, selectedDate)
                   );
                   console.log(
-                    new dbInfoForTickets(1, adultTicketCount, 10, selectedDate)
+                    new dbInfoForTickets(8, adultTicketCount, 10, selectedDate)
                   );
                 }
                 if (childTicketCount > 0) {
                   handleSubmit(
-                    new dbInfoForTickets(2, childTicketCount, 5, selectedDate)
+                    new dbInfoForTickets(7, childTicketCount, 5, selectedDate)
                   );
                   console.log(
-                    new dbInfoForTickets(2, childTicketCount, 5, selectedDate)
+                    new dbInfoForTickets(7, childTicketCount, 5, selectedDate)
                   );
                 }
                 emptyStates();
