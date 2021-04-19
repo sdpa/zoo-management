@@ -43,7 +43,7 @@ router.get("/list_by_enclosure", (req, res, next) => {
   let location_id = parseInt(req.query.location);
 
   let sql =
-    "SELECT animals.*, species.species_name   FROM animals  JOIN species on animals.species_id = species.species_id  WHERE animals.location_id = ? and animals.health_status != 'Deceased' ";
+    "SELECT animals.*, species.species_name   FROM animals  JOIN species on animals.species_id = species.species_id  WHERE animals.location_id = ? and animals.health_status != 'Deceased' AND animals.is_active = true ";
   db.query(sql, [location_id], (error, result) => {
     if (error) throw error;
     response = JSON.parse(JSON.stringify(result));
@@ -75,6 +75,7 @@ router.put("/change_health", (req, res, next) => {
     }
   );
 });
+
 router.delete("/delete/:id", (req, res, next) => {
     let animal_id = req.params.id;
     console.log(animal_id);
@@ -86,25 +87,10 @@ router.delete("/delete/:id", (req, res, next) => {
         (err, results) => {
             if (err) throw err;
             console.log(results);
-            db.query(
-                "SELECT * FROM animals WHERE animal_id = ? ",
-                [animal_id],
-                (err, results) => {
-                    if (err) throw err;
-                    rows = JSON.parse(JSON.stringify(results));
-                    console.log("rows: ", rows);
-                    let user_id = rows[0].user_id;
-                    db.query(
-                        "UPDATE users SET is_active = ? WHERE user_id = ? ",
-                        [false, user_id],
-                        (err, results) => {
-                            if (err) throw err;
-                            return res.send(200);
-                        }
-                    );
-                }
-            );
+            
         }
     );
 });
+
+
 module.exports = router;

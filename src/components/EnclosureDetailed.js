@@ -117,7 +117,7 @@ const EnclosureDetailed = ({ match }) => {
     };
     const handleDeleteAnimal = () => {
         axios
-            .delete(`/animal/delete/${currentAnimal.animal_id}`)
+            .delete(`/animals/delete/${currentAnimal.animal_id}`)
             .then((res) => {
                 console.log(res);
             })
