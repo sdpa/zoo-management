@@ -43,7 +43,7 @@ router.get("/list_by_enclosure", (req, res, next) => {
   let location_id = parseInt(req.query.location);
 
   let sql =
-    "SELECT animals.*, species.species_name   FROM animals  JOIN species on animals.species_id = species.species_id  WHERE animals.location_id = ? and animals.health_status != 'Deceased' ";
+    "SELECT animals.*, species.species_name   FROM animals  JOIN species on animals.species_id = species.species_id  WHERE animals.location_id = ? and animals.health_status != 'Deceased' AND animals.is_active = true ";
   db.query(sql, [location_id], (error, result) => {
     if (error) throw error;
     response = JSON.parse(JSON.stringify(result));
@@ -75,34 +75,22 @@ router.put("/change_health", (req, res, next) => {
     }
   );
 });
-router.delete("/delete", (req, res, next) => {
-    animal_id = req.animal_id;
+
+router.delete("/delete/:id", (req, res, next) => {
+    let animal_id = req.params.id;
+    console.log(animal_id);
+    console.log(req.params);
+    console.log(req.body);
     db.query(
         "UPDATE animals SET is_active = ? WHERE animal_id = ? ",
-        [false, req.body.animal_id],
+        [false, animal_id],
         (err, results) => {
             if (err) throw err;
-            console.log(resuls);
-            //Get the user_id from the employee that was updated.
-            db.query(
-                "SELECT * FROM animals WHERE animal_id = ? ",
-                [req.body.animal_id],
-                (err, results) => {
-                    if (err) throw err;
-                    rows = JSON.parse(JSON.stringify(results));
-                    let user_id = rows[0].user_id;
-                }
-            );
-            //update the users table to make the user account not active
-            db.query(
-                "UPDATE users SET is_active = ? WHERE animal_id = ? ",
-                [false, user_id],
-                (err, results) => {
-                    if (err) throw err;
-                    return res.send(200);
-                }
-            );
+            console.log(results);
+            
         }
     );
 });
+
+
 module.exports = router;

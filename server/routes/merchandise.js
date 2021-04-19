@@ -7,7 +7,7 @@ const db = require("../database");
 router.get("/all_products", (req, res, next) => {
   let location_id = req.query.location;
   db.query(
-    "SELECT * FROM merchandise WHERE location_sold = ? ",
+    "SELECT * FROM merchandise WHERE (location_sold = ? AND active=true)",
     [location_id],
     (err, results) => {
       if (err) throw err;
@@ -91,6 +91,17 @@ router.put("/change_stock", (req, res, next) => {
       );
     }
   );
+});
+
+router.post("/removeItem", (req, res) => {
+  let sql = "UPDATE merchandise SET active=false WHERE product_name=?";
+  let response = {};
+
+  db.query(sql, [req.body.product], (error, result) => {
+    if (error) throw error;
+    response = JSON.parse(JSON.stringify(result));
+    return res.send(response);
+  });
 });
 
 

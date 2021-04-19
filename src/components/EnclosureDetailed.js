@@ -116,7 +116,14 @@ const EnclosureDetailed = ({ match }) => {
             });
     };
     const handleDeleteAnimal = () => {
-        console.log(currentAnimal);
+        axios
+            .delete(`/animals/delete/${currentAnimal.animal_id}`)
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     };
     const openDeleteDialog = (animal) => {
         setCurretAnimal(animal);
