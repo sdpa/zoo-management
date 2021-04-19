@@ -133,11 +133,11 @@ function Navbar() {
                       <Button>Purchase History</Button>
                     </Link>
                   ) : null}
-                  {user.role === "Customer" ? (
+                  
                     <Link href={`/giftshops`}>
                       <Button>Gift Shop</Button>
                     </Link>
-                  ) : null}
+                  
                   {user.role === "Customer" ? (
                     <Link href={`/ticket`}>
                       <Button>Buy Tickets</Button>
