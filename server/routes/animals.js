@@ -81,13 +81,13 @@ router.delete("/delete/:id", (req, res, next) => {
     console.log(req.params);
     console.log(req.body);
     db.query(
-        "UPDATE animal SET is_active = ? WHERE animal_id = ? ",
+        "UPDATE animals SET is_active = ? WHERE animal_id = ? ",
         [false, animal_id],
         (err, results) => {
             if (err) throw err;
             console.log(results);
             db.query(
-                "SELECT * FROM animal WHERE animal_id = ? ",
+                "SELECT * FROM animals WHERE animal_id = ? ",
                 [animal_id],
                 (err, results) => {
                     if (err) throw err;
