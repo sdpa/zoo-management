@@ -66,11 +66,11 @@ const EnclosureDetailed = ({ match }) => {
 
     return (
         <div style={{ padding: "10px" }}>
-             (
+             
                     <>
                         {purchases.length > 0 ? (
                             <>
-                                <Typography>{`{Purchase History}`}</Typography>
+                                <Typography>{`Purchase History`}</Typography>
                                 <TableContainer
                                     component={Paper}
                                     style={{ width: 800, paddingTop: "10px" }}>
@@ -79,7 +79,7 @@ const EnclosureDetailed = ({ match }) => {
                                             <TableRow>
                                                 <TableCell>Name </TableCell>
                                                 <TableCell align="right">Purchase Date</TableCell>
-                                                <TableCell align="right">Item</TableCell>
+                                                
                                                 <TableCell align="right">Quantity</TableCell>
                                                 <TableCell align = "right">Total Cost</TableCell>
 
@@ -89,14 +89,15 @@ const EnclosureDetailed = ({ match }) => {
                                             {purchases.map((purchase) => (
                                                 <TableRow key={purchase.transaction_id}>
                                                     <TableCell component="th" scope="row">
-                                                        {purchase.purchase_time.toString().split("T")[0]}
+                                                        {purchase.product_name}
                                                     </TableCell>
                                                     <TableCell align="right">
-                                                        {purchase.item_purchased}
+                                                    {purchase.purchase_time.toString().split("T")[0]}
                                                     </TableCell>
+                                                    
                                                     <TableCell align="right">{purchase.quantity_purchased}</TableCell>
                                                     <TableCell align="right">
-                                                        {purchase.total_purchase_cost}
+                                                        {"$" + purchase.total_purchase_cost}
 
                                                     </TableCell>
                                                     
@@ -108,10 +109,10 @@ const EnclosureDetailed = ({ match }) => {
                                 </TableContainer>
                             </>
                         ) : (
-                                <Typography style={{ padding: "10px" }}>No Animals</Typography>
+                                <Typography style={{ padding: "10px" }}>No Purchases</Typography>
                             )}
                     </>
-                )
+                
         </div>
     );
 };
