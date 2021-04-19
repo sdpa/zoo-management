@@ -174,7 +174,7 @@ const EnclosureList = () => {
   const [alertError, setAlertError] = useState(null);
 
   const [addDialog, setAddDialog] = useState(false);
-  const [location_image_file, setLocation_image_file] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(false);
   const openAddDialog = () => {
     setAddDialog(true);
   };
@@ -183,41 +183,16 @@ const EnclosureList = () => {
     setAddDialog(false);
   };
 
-  const validate = (values) => {
-    let errors = {};
-    if (!values.location_name) {
-      errors.location_name = "Required";
-    } //else if (
-    //   !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-    // ) {
-    //   errors.email = "Invalid email address";
-    // } else if (values.email.length > 25) {
-    //   errors.email = "Max 25 characters";
-    // }
-    // if (values.password.length < 4) {
-    //   errors.password = "Minimum 4 characters";
-    // }
-    if (values.location_type == "") {
-      errors.location_type = "Required";
-    }
-    if (values.location_image == "") {
-      errors.location_image = "Required";
-    }
-    
-    // if (values.worK_location == "") {
-    //   errors.work_location = "Required";
-    // }
-    return errors;
-  };
+  const [location_name, setLocationName] = useState("");
+  const [location_type, setLocationType] = useState("Enclosure");
 
-  const handleCreateEmployee = (values) => {
-    console.log(values);
+  const handleCreateEnclosure = () => {
+    const data = new FormData();
+    data.append("location_name", location_name);
+    data.append("location_type", location_type);
+    data.append("location_image", selectedFile);
     axios
-      .post("/locations", {
-        location_name: values.location_name,
-        location_type: "Enclosure",
-        location_image: location_image_file,
-      })
+      .post("/locations", data)
       .then((res) => {
         console.log(res);
       })
@@ -238,36 +213,16 @@ const EnclosureList = () => {
       });
   };
 
-  const formik = useFormik({
-    initialValues: {
-      location_name: "",
-      location_type: "Enclosure",
-      location_image: "",
-    },
-    
-    onSubmit: (values) => {
-      handleCreateEmployee(values);
-      setAddDialog(false);
-    },
-  });
-
-
   useEffect(() => {
     getAllEnclosures();
     // console.log(enclosures);
   }, []);
 
   return (
-
-    
     <div className={classes.categoryContainer}>
       {/* <Navbar></Navbar> */}
 
-      
-
       <Typography className={classes.listCategory}>Enclosures</Typography>
-
-      
 
       <Grid direction="row" container spacing={2} className={classes.grid}>
         {enclosures.map((enclosure, i) => {
@@ -283,88 +238,80 @@ const EnclosureList = () => {
         })}
       </Grid>
 
-
       {user.role == "Admin" ? (
-          <Grid item>
+        <Grid item>
           <Button variant="contained" onClick={openAddDialog}>
             Add Enclosure
           </Button>
-          </Grid>
-        ) : null} 
+        </Grid>
+      ) : null}
 
-
-        {/* Modal for adding new item to gift shop */}
-        <div>
-                <Dialog open={addDialog} onClose={closeAddDialog}>
-                  <DialogTitle>Add New Enclosure</DialogTitle>
-                  <DialogContent>
-                    <Grid
-                      container
-                      spacing={1}
-                      direction="column"
-                      className={classes.root}>
-                      <Typography className={classes.formTitle}>
-                        
-                      </Typography>
-                      {alertError ? (
-                        <Alert
-                          severity="error"
-                          style={{ paddingBottom: "10px" }}>
-                          {alertError}
-                        </Alert>
-                      ) : null}
-                      <Grid item xs={12}>
-                        <TextField
-                          label="Name"
-                          id="location_name"
-                          onChange={formik.handleChange}
-                          name="location_name"
-                          variant="outlined"
-                          style={{ width: "100%" }}
-                          // error={formik.errors.full_name}
-                          // helperText={
-                          //   formik.errors.full_name !== ""
-                          //     ? formik.errors.full_name
-                          //     : ""
-                          // }
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <Button
-                          variant="contained"
-                          component="label"
-                        >
-                          Upload File
-                          <input id="file" name="file" type="file" onChange={(event) => {
-                          setLocation_image_file("location_image", event.currentTarget.files[0]);
-                        }} />
-                      </Button>
-                      </Grid>
-                      
-                      
-                    </Grid>
-                  </DialogContent>
-                  <DialogActions>
-                    <Button
-                      onClick={formik.handleSubmit}
-                      variant="contained"
-                      color="secondary">
-                      
-                      Save
-                    </Button>
-                    <Button
-                      onClick={closeAddDialog}
-                      variant="contained"
-                      color="secondary">
-                      CANCEL
-                    </Button>
-                  </DialogActions>
-                </Dialog>
-              </div>
-
+      {/* Modal for adding new item to gift shop */}
+      <div>
+        <Dialog open={addDialog} onClose={closeAddDialog}>
+          <DialogTitle>Add New Enclosure</DialogTitle>
+          <DialogContent>
+            <Grid
+              container
+              spacing={1}
+              direction="column"
+              className={classes.root}>
+              <Typography className={classes.formTitle}></Typography>
+              {alertError ? (
+                <Alert severity="error" style={{ paddingBottom: "10px" }}>
+                  {alertError}
+                </Alert>
+              ) : null}
+              <Grid item xs={12}>
+                <TextField
+                  label="Name"
+                  id="location_name"
+                  onChange={(e) => {
+                    setLocationName(e.target.value);
+                  }}
+                  name="location_name"
+                  variant="outlined"
+                  style={{ width: "100%" }}
+                  // error={formik.errors.full_name}
+                  // helperText={
+                  //   formik.errors.full_name !== ""
+                  //     ? formik.errors.full_name
+                  //     : ""
+                  // }
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Button variant="contained" component="label">
+                  Upload File
+                  <input
+                    id="file"
+                    name="location_name"
+                    type="file"
+                    onChange={(event) => {
+                      setSelectedFile(event.target.files[0]);
+                    }}
+                  />
+                </Button>
+              </Grid>
+            </Grid>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={handleCreateEnclosure}
+              variant="contained"
+              color="secondary">
+              Save
+            </Button>
+            <Button
+              onClick={closeAddDialog}
+              variant="contained"
+              color="secondary">
+              CANCEL
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
     </div>
-
-    
   );
 };
 
