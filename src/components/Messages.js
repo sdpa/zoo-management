@@ -32,13 +32,24 @@ const Messages = () => {
     //     console.log(err);
     // })
   };
+  const [currentImage, setCurrentMessage] = useState(false);
 
   return (
     <>
       {messages.length > 0 ? (
         <>
           {messages.map((mes, index) => {
-            return <Alert key={index}>{mes.message}</Alert>;
+            return (
+              <div
+                key={index}
+                onClick={(e, mes) => {
+                  setCurrentMessage(mes);
+                  console.log(mes);
+                  console.log("stuff");
+                }}>
+                {mes.message}
+              </div>
+            );
           })}
         </>
       ) : (
