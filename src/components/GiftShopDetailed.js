@@ -73,6 +73,8 @@ const GiftShopDetailed = ({ match }) => {
 
   const [openDialogedit, setOpenDialogedit] = useState(false);
 
+  const [openDialogRemove, setOpenDialogRemove] = useState(false); 
+
   const [addDialog, setAddDialog] = useState(false);
 
   //Modal
@@ -92,6 +94,15 @@ const GiftShopDetailed = ({ match }) => {
     setCurrentProduct(product);
     setOpenDialogedit(true);
   };
+
+  const handleModalRemove = (product) => {
+    setCurrentProduct(product);
+    setOpenDialogRemove(true);
+  }
+
+  const handleModalCloseRemove = () => {
+    setOpenDialogRemove(false); 
+  }
 
   const handleModalCloseEdit = () => {
     setOpenDialogedit(false);
@@ -198,12 +209,24 @@ const GiftShopDetailed = ({ match }) => {
     setAddDialog(true);
   };
 
-  
+  const handleRemove = (product_name) => {
+    axios
+      .post("/merchandise/removeItem", { product: product_name })
+      .then((res) => {
+        setOpenDialogRemove(false);
+        console.log(res);
+        window.location.reload(false); 
+      })
+      .catch((err) => {
+        setOpenDialogRemove(true);
+        console.log(err);
+      });
+  }
 
 
   const handleSave = () => {
     axios
-      .put("/merchandise/change_stock", currentProduct)
+      .post("/merchandise/change_stock", currentProduct)
       .then((res) => {
         setOpenDialogedit(false);
         console.log(res);
@@ -378,6 +401,13 @@ const GiftShopDetailed = ({ match }) => {
                               }}>
                               Edit Stock
                             </Button>
+                            <Button
+                              variant="outlined"
+                              onClick={() => {
+                                handleModalRemove(product);
+                              }}>
+                              REMOVE
+                            </Button>
                         </TableCell>):null}
                       </TableRow>
                     ))}
@@ -490,6 +520,34 @@ const GiftShopDetailed = ({ match }) => {
                     </Button>
                     <Button
                       onClick={closeAddDialog}
+                      variant="contained"
+                      color="secondary">
+                      CANCEL
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+              </div>
+
+              {/* Modal for removing item */}
+              <div>
+                <Dialog open={openDialogRemove}>
+                  <DialogTitle>
+                    Remove {currentProduct.product_name}
+                  </DialogTitle>
+                  <DialogContent>
+                  <Typography className={classes.formTitle}>
+                    Are you sure?
+                  </Typography>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button
+                      onClick={() =>  {handleRemove(currentProduct.product_name);} }
+                      variant="contained"
+                      color="secondary">
+                      Yes
+                    </Button>
+                    <Button
+                      onClick={handleModalCloseRemove}
                       variant="contained"
                       color="secondary">
                       CANCEL
