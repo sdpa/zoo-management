@@ -36,39 +36,22 @@ import { UserContext } from "./UserContext";
 
 const EnclosureDetailed = ({ match }) => {
     const { user } = useContext(UserContext);
+    let id = user.userID;
 
     let history = useHistory();
-    console.log(history);
-
-    const [loading, setLoading] = useState(true);
 
     //Get purchase history.
     const [purchases, setPurchases] = useState([]);
-    const [users, setUserID] = useState({});
 
-    const getUserID = () => {
-        axios
-            .get(`/users/by_id`, {
-                params: { location: match.params.id },
-            })
-            .then((res) => {
-                console.log("Name: ", res);
-                setUserID(res.data[0]);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
-    
     const getPurchases = () => {
         axios
-            .get(`/purchaseHistory`, {
-                params: { location: match.params.id },
+            .get(`/purchaseHistory/history`, {
+                params: { userID: id },
             })
             .then((res) => {
                 console.log(res);
                 setPurchases(res.data);
-                setLoading(false);
+                // setLoading(false);
             })
             .catch((err) => {
                 console.log(err);
@@ -76,19 +59,18 @@ const EnclosureDetailed = ({ match }) => {
     };
 
     useEffect(() => {
-        getUserID();
         getPurchases();
     }, []);
 
+    console.log(purchases); 
+
     return (
         <div style={{ padding: "10px" }}>
-            {loading ? (
-                <LinearProgress color="primary" />
-            ) : (
+             
                     <>
                         {purchases.length > 0 ? (
                             <>
-                                <Typography>{`{Purchase History}`}</Typography>
+                                <Typography>{`Purchase History`}</Typography>
                                 <TableContainer
                                     component={Paper}
                                     style={{ width: 800, paddingTop: "10px" }}>
@@ -97,7 +79,7 @@ const EnclosureDetailed = ({ match }) => {
                                             <TableRow>
                                                 <TableCell>Name </TableCell>
                                                 <TableCell align="right">Purchase Date</TableCell>
-                                                <TableCell align="right">Item</TableCell>
+                                                
                                                 <TableCell align="right">Quantity</TableCell>
                                                 <TableCell align = "right">Total Cost</TableCell>
 
@@ -107,14 +89,15 @@ const EnclosureDetailed = ({ match }) => {
                                             {purchases.map((purchase) => (
                                                 <TableRow key={purchase.transaction_id}>
                                                     <TableCell component="th" scope="row">
-                                                        {purchase.purchase_time}
+                                                        {purchase.product_name}
                                                     </TableCell>
                                                     <TableCell align="right">
-                                                        {purchase.item_purchased}
+                                                    {purchase.purchase_time.toString().split("T")[0]}
                                                     </TableCell>
+                                                    
                                                     <TableCell align="right">{purchase.quantity_purchased}</TableCell>
                                                     <TableCell align="right">
-                                                        {purchase.total_purchase_cost}
+                                                        {"$" + purchase.total_purchase_cost}
 
                                                     </TableCell>
                                                     
@@ -126,10 +109,10 @@ const EnclosureDetailed = ({ match }) => {
                                 </TableContainer>
                             </>
                         ) : (
-                                <Typography style={{ padding: "10px" }}>No Animals</Typography>
+                                <Typography style={{ padding: "10px" }}>No Purchases</Typography>
                             )}
                     </>
-                )}
+                
         </div>
     );
 };
