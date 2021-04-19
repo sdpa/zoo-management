@@ -2,6 +2,7 @@
   "ExpandedNodes": [
     "",
     "\\server",
+    "\\server\\routes",
     "\\src",
     "\\src\\components",
     "\\src\\images"
