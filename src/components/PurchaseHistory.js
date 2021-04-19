@@ -1,117 +1,137 @@
-import React, { useState, useContext, useEffect } from "react";
-import './PurchaseHistory.css';
+import React, { useEffect, useState, useContext } from "react";
+import {
+    List,
+    ListItem,
+    Divider,
+    ListItemIcon,
+    Typography,
+    Grid,
+    Chip,
+    ListItemText,
+    LinearProgress,
+    Paper,
+    Modal,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    Select,
+    MenuItem,
+} from "@material-ui/core";
+
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Button from "@material-ui/core/Button";
+
+import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
+
+import { useHistory } from "react-router-dom";
+
 import { UserContext } from "./UserContext";
 
-//const express = require('express');
-//const bodyParser = require('body-parser');
-//const mysql = require('mysql');
-
-const URL = 'database-1.cmkw6xcxraqi.us-east-1.rds.amazonaws.com'
-
-/*const connection = mysql.createPool({
-  host     : 'database-1.cmkw6xcxraqi.us-east-1.rds.amazonaws.com',
-  user     : 'admin',
-  password : 'admin1234',
-  database : 'zoo_db'
-});*/
-
-const PurchaseHistory = () => {
+const EnclosureDetailed = ({ match }) => {
     const { user } = useContext(UserContext);
 
-    const [customers, setCustomers] = React.useState([]);
-    const [purchaseHistory, setPurchaseHistory] = useState([]); 
-    const [itemKey, setItemKey] = useState([]); 
-    let id = user.userID;
+    let history = useHistory();
+    console.log(history);
 
-    const getPurchaseHistory = () => {
-        console.log("getting purchase history...");
+    const [loading, setLoading] = useState(true);
+
+    //Get purchase history.
+    const [purchases, setPurchases] = useState([]);
+    const [users, setUserID] = useState({});
+
+    const getUserID = () => {
         axios
-            .get(`/purchaseHistory/history`, {
-                params: { userID: id },
+            .get(`/users/by_id`, {
+                params: { location: match.params.id },
             })
             .then((res) => {
-                // console.log(res);
-                // console.log(res.data);
-                setPurchaseHistory(res.data); 
+                console.log("Name: ", res);
+                setUserID(res.data[0]);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+    
+    const getPurchases = () => {
+        axios
+            .get(`/purchaseHistory`, {
+                params: { location: match.params.id },
+            })
+            .then((res) => {
+                console.log(res);
+                setPurchases(res.data);
+                setLoading(false);
             })
             .catch((err) => {
                 console.log(err);
             });
     };
 
-    const getItemKey = () => {
-        console.log("getting item_id and product_name");
-        axios
-            .get(`merchandise/all`)
-            .then((res) => {
-                // console.log(res);
-                // console.log(res.data);
-                setItemKey(res.data); 
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
-
-
-    // added sql data
-    React.useEffect(() => {
-        getData()
-        getPurchaseHistory();
-        getItemKey(); 
-    }, [])
-
-    console.log(purchaseHistory); 
-    console.log(itemKey); 
-
-    const getData = async () => {
-
-        const response = await axios.get(URL)
-        setCustomers(response.data)
-    }
-
-    const renderHeader = () => {
-        let headerElement = ['id', 'name', 'purchase date', 'item', 'quantity', 'total cost']
-
-        return headerElement.map((key, index) => {
-            return <th key={index}>{key.toUpperCase()}</th>
-        })
-    }
-
-    const renderBody = () => {
-        return customers && customers.map(({ id, name, date, item, quantity, cost }) => {
-            return (
-                <tr key={id}>
-                    <td>{id}</td>
-                    <td>{name}</td>
-                    <td>{date}</td>
-                    <td>{item}</td>
-                    <td>{quantity}</td>
-                    <td>{cost}</td>
-                </tr>
-            )
-        })
-    }
-
-      
-
-    
+    useEffect(() => {
+        getUserID();
+        getPurchases();
+    }, []);
 
     return (
-        <>
-            <h1 id='title'>Purchase History</h1>
-            <table id='customer'>
-                <thead>
-                    <tr>{renderHeader()}</tr>
-                </thead>
-                <tbody>
-                    {renderBody()}
-                </tbody>
-            </table>
-        </>
-    )
-}
+        <div style={{ padding: "10px" }}>
+            {loading ? (
+                <LinearProgress color="primary" />
+            ) : (
+                    <>
+                        {purchases.length > 0 ? (
+                            <>
+                                <Typography>{`{Purchase History}`}</Typography>
+                                <TableContainer
+                                    component={Paper}
+                                    style={{ width: 800, paddingTop: "10px" }}>
+                                    <Table aria-label="simple table">
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell>Name </TableCell>
+                                                <TableCell align="right">Purchase Date</TableCell>
+                                                <TableCell align="right">Item</TableCell>
+                                                <TableCell align="right">Quantity</TableCell>
+                                                <TableCell align = "right">Total Cost</TableCell>
 
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {purchases.map((purchase) => (
+                                                <TableRow key={purchase.transaction_id}>
+                                                    <TableCell component="th" scope="row">
+                                                        {purchase.purchase_time}
+                                                    </TableCell>
+                                                    <TableCell align="right">
+                                                        {purchase.item_purchased}
+                                                    </TableCell>
+                                                    <TableCell align="right">{purchase.quantity_purchased}</TableCell>
+                                                    <TableCell align="right">
+                                                        {purchase.total_purchase_cost}
 
-export default PurchaseHistory;
+                                                    </TableCell>
+                                                    
+
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            </>
+                        ) : (
+                                <Typography style={{ padding: "10px" }}>No Animals</Typography>
+                            )}
+                    </>
+                )}
+        </div>
+    );
+};
+
+export default EnclosureDetailed;
