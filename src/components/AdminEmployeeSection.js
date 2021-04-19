@@ -245,19 +245,18 @@ const AdminEmployeeSection = () => {
         <LinearProgress color="primary" />
       ) : (
         <>
+          <Typography>{`All Employees`}</Typography>
+          <Button variant="contained" onClick={openAddDialog}>
+            Add Employee
+          </Button>
           {employees.length > 0 && locations.length > 0 ? (
             <>
-              <Typography>{`All Employees`}</Typography>
               <Grid
                 container
                 direction="column"
                 alignItems="flex-start"
                 spacing={2}>
-                <Grid item>
-                  <Button variant="contained" onClick={openAddDialog}>
-                    Add Employee
-                  </Button>
-                </Grid>
+                <Grid item></Grid>
                 <Grid item>
                   <TableContainer
                     component={Paper}

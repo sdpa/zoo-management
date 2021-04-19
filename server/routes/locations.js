@@ -83,38 +83,29 @@ router.post(
     upload.single("location_image"),
   ],
   (req, res, next) => {
-    const err = validationResult(req);
-    console.log(err);
-    if (!err.isEmpty()) {
-      return res.status(400).json({ errors: err.array() });
-    }
-    // console.log(req);
-    console.log(req.body);
-    console.log(req.file);
-
     let filename = "";
     if (req.file) {
       filename = req.file.originalname;
     }
 
-    // let img = req.files.img;
+    // // let img = req.files.img;
     let body = req.body;
 
-    //Object to insert
+    // //Object to insert
     let location = {
       location_type: body.location_type,
       location_name: body.location_name,
       location_image: filename,
     };
 
-    // console.log(location);
+    // // console.log(location);
 
-    // //Make query
+    // // //Make query
     let sql = `INSERT INTO locations SET ?`;
 
     let reponse = {};
 
-    // Open a connection and make a post request to the server.
+    // // Open a connection and make a post request to the server.
     db.query(sql, location, (error, result) => {
       if (error) throw error;
       response = JSON.parse(JSON.stringify(result));
@@ -123,8 +114,5 @@ router.post(
     // res.send(200);
   }
 );
-
-
-
 
 module.exports = router;
