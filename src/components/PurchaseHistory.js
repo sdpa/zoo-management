@@ -36,39 +36,22 @@ import { UserContext } from "./UserContext";
 
 const EnclosureDetailed = ({ match }) => {
     const { user } = useContext(UserContext);
+    let id = user.userID;
 
     let history = useHistory();
-    console.log(history);
-
-    const [loading, setLoading] = useState(true);
 
     //Get purchase history.
     const [purchases, setPurchases] = useState([]);
-    const [users, setUserID] = useState({});
 
-    const getUserID = () => {
-        axios
-            .get(`/users/by_id`, {
-                params: { location: match.params.id },
-            })
-            .then((res) => {
-                console.log("Name: ", res);
-                setUserID(res.data[0]);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
-    
     const getPurchases = () => {
         axios
-            .get(`/purchaseHistory`, {
-                params: { location: match.params.id },
+            .get(`/purchaseHistory/history`, {
+                params: { userID: id },
             })
             .then((res) => {
                 console.log(res);
                 setPurchases(res.data);
-                setLoading(false);
+                // setLoading(false);
             })
             .catch((err) => {
                 console.log(err);
@@ -76,15 +59,14 @@ const EnclosureDetailed = ({ match }) => {
     };
 
     useEffect(() => {
-        getUserID();
         getPurchases();
     }, []);
 
+    console.log(purchases); 
+
     return (
         <div style={{ padding: "10px" }}>
-            {loading ? (
-                <LinearProgress color="primary" />
-            ) : (
+             (
                     <>
                         {purchases.length > 0 ? (
                             <>
@@ -107,7 +89,7 @@ const EnclosureDetailed = ({ match }) => {
                                             {purchases.map((purchase) => (
                                                 <TableRow key={purchase.transaction_id}>
                                                     <TableCell component="th" scope="row">
-                                                        {purchase.purchase_time}
+                                                        {purchase.purchase_time.toString().split("T")[0]}
                                                     </TableCell>
                                                     <TableCell align="right">
                                                         {purchase.item_purchased}
@@ -129,7 +111,7 @@ const EnclosureDetailed = ({ match }) => {
                                 <Typography style={{ padding: "10px" }}>No Animals</Typography>
                             )}
                     </>
-                )}
+                )
         </div>
     );
 };

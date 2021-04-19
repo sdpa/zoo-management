@@ -30,7 +30,7 @@ router.post("/", (req, res) => {
 router.get("/history", (req, res) => {
   
   let userID = parseInt(req.query.userID);
-  let sql = "SELECT * FROM purchase_history where customer_id=?";
+  let sql = "SELECT purchase_history.*, merchandise.product_name FROM purchase_history, merchandise where purchase_history.customer_id=? AND purchase_history.item_purchased=merchandise.item_id";
 
   let response = {};
   db.query(sql, [userID], (error, result) => {
