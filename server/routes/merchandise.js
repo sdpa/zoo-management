@@ -18,14 +18,11 @@ router.get("/all_products", (req, res, next) => {
 });
 
 router.get("/all", (req, res) => {
-  db.query(
-    "SELECT * FROM merchandise",
-    (err, results) => {
-      if (err) throw err;
-      rows = JSON.parse(JSON.stringify(results));
-      res.send(rows);
-    }
-  );
+  db.query("SELECT * FROM merchandise", (err, results) => {
+    if (err) throw err;
+    rows = JSON.parse(JSON.stringify(results));
+    res.send(rows);
+  });
 });
 
 //Purchase a product
@@ -43,7 +40,7 @@ router.post("/buy", (req, res, next) => {
           customer_id: req.body.user_id,
           quantity_purchased: req.body.quantity_selected,
           total_purchase_cost: req.body.amount_due,
-          purchase_time: new Date()
+          purchase_time: new Date(),
         };
         db.query(
           "INSERT INTO purchase_history SET ? ",
@@ -72,6 +69,7 @@ router.post("/buy", (req, res, next) => {
 
 router.put("/change_stock", (req, res, next) => {
   //Get animal from database
+  console.log(req.body);
   db.query(
     "SELECT * FROM merchandise WHERE item_id = ? ",
     [req.body.item_id],
@@ -103,7 +101,6 @@ router.post("/removeItem", (req, res) => {
     return res.send(response);
   });
 });
-
 
 //Enter an item into gift shop
 router.post("/additem", (req, res, next) => {

@@ -30,11 +30,13 @@
     "web-vitals": "^1.1.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start-client": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "nodemon server/index.js --watch server"
+    "client": "npm start",
+    "server": "nodemon server/index.js --watch server",
+    "start": "node server/index.js"
   },
   "eslintConfig": {
     "extends": [

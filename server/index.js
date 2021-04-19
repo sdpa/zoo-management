@@ -13,14 +13,20 @@ var loginRouter = require("./routes/login");
 var employeeRouter = require("./routes/employee");
 var reportsRouter = require("./routes/reports");
 var messagesRouter = require("./routes/messages");
+var path = require("path");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(express.static(path.resolve(__dirname, "../build")));
 // app.use(fileupload());
 
 const PORT = process.env.PORT || 5000;
+
+// app.get("/", (req, res) => {
+//   res.sendFile(path.join(__dirname, "../build/" + "index.html"));
+// });
 
 app.use("/signup", signupRouter);
 app.use("/login", loginRouter);

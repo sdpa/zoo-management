@@ -55,7 +55,8 @@ router.post("/customer_report", (req, res, next) => {
       ` AND purchase_history.total_purchase_cost >= ${req.body.amount_spent}`;
   }
   if (req.body.date_from) {
-    sql = sql + ` AND purchase_history.purchase_time >= "${req.body.date_from}"`;
+    sql =
+      sql + ` AND purchase_history.purchase_time >= "${req.body.date_from}"`;
   }
   if (req.body.date_to) {
     sql = sql + ` AND purchase_history.purchase_time <= "${req.body.date_to}"`;
@@ -78,7 +79,7 @@ router.post("/admin_report", (req, res, next) => {
       sql + ` AND merchandise.product_name LIKE '%${req.body.product_name}%'`;
   }
   if (req.body.shop) {
-    sql = sql + ` AND merchandise.location_sold = ${req.body.shop_name}`;
+    sql = sql + ` AND merchandise.location_sold = ${req.body.shop}`;
   }
   if (req.body.amount_spent) {
     sql =
