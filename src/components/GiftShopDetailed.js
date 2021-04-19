@@ -298,11 +298,16 @@ const GiftShopDetailed = ({ match }) => {
             
                 
               <Typography>{`Products in ${giftShop.location_name} Enclosure`}</Typography>
-              <Grid item>
-                  <Button variant="contained" onClick={openAddDialog}>
-                    Add Item
-                  </Button>
-                </Grid>
+              
+              {user.role == "Admin" ? (
+                          <Grid item>
+                          <Button variant="contained" onClick={openAddDialog}>
+                            Add Item
+                          </Button>
+                        </Grid>
+                        ) : null}
+              
+              
               <TableContainer
                 component={Paper}
                 style={{ width: 800, paddingTop: "10px" }}>
