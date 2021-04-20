@@ -73,7 +73,7 @@ router.post(
                 if (user.role_id == "Employee") {
                   console.log("Role is is employee");
                   let new_employee = {
-                    job_title: "zookeeper",
+                    job_title: req.body.job_title,
                     user_id: user.user_id,
                     wage: 30.0,
                     work_location: req.body.work_location,
