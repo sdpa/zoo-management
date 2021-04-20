@@ -3,7 +3,6 @@ const router = express.Router();
 const { body, validationResult } = require("express-validator");
 const db = require("../database");
 
-//Get all animals
 router.post("/employee_report", (req, res, next) => {
   let default_values = {
     species: "",
@@ -96,7 +95,6 @@ router.post("/admin_report", (req, res, next) => {
   db.query(sql, (error, result) => {
     if (error) throw error;
     all_purchases = JSON.parse(JSON.stringify(result));
-
     return res.send({ purchase_history: all_purchases });
   });
   // return res.send(404);
