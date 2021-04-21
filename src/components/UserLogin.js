@@ -110,6 +110,7 @@ const UserLogin = (props) => {
           <TextField
             label="Password"
             id="password"
+            type="password"
             name="password"
             onChange={formik.handleChange}
             variant="outlined"

@@ -113,16 +113,30 @@ router.post("/additem", (req, res, next) => {
   };
 
   console.log(req.body);
+  //Check is product exists in that location.
 
-  let sql = "INSERT INTO merchandise SET ?";
+  db.query(
+    "SELECT * FROM merchandise WHERE product_name LIKE ? AND location_sold = ? ",
+    [item.product_name, parseInt(item.location_sold)],
+    (err, result) => {
+      if (err) throw err;
+      rows = JSON.parse(JSON.stringify(result));
+      if (rows.length > 0) {
+        return res
+          .status(400)
+          .send({ error: "Product Already exists in this shop" });
+      } else {
+        let sql = "INSERT INTO merchandise SET ?";
 
-  let response = {};
-  db.query(sql, item, (error, result) => {
-    if (error) throw error;
-    response = JSON.parse(JSON.stringify(result));
-    return res.send(response);
-  });
-  //   return res.send(200);
+        let response = {};
+        db.query(sql, item, (error, result) => {
+          if (error) throw error;
+          response = JSON.parse(JSON.stringify(result));
+          return res.send(response);
+        });
+      }
+    }
+  );
 });
 
 module.exports = router;

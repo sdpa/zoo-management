@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-// const fileupload = require("express-fileupload");
+const fileupload = require("express-fileupload");
 // const bodyParser = require("body-parser");
 
 var locationRouter = require("./routes/locations");
@@ -19,8 +19,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.resolve(__dirname, "../build")));
-// app.use(fileupload());
+// app.use(express.static(path.resolve(__dirname, "../build")));
+app.use(fileupload());
 
 const PORT = process.env.PORT || 5000;
 

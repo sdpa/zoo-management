@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { body, validationResult } = require("express-validator");
+const { encode, decode } = require("base64-arraybuffer");
 const db = require("../database");
 const multer = require("multer");
 const storage = multer.diskStorage({
@@ -80,39 +81,68 @@ router.post(
   [
     // body("location_type").notEmpty(),
     // body("location_name").notEmpty(),
-    upload.single("location_image"),
+    // upload.single("location_image"),
   ],
   (req, res, next) => {
-    let filename = "";
-    if (req.file) {
-      filename = req.file.originalname;
+    let file = null;
+    if (req.files) {
+      file = req.files.location_image;
     }
 
-    // // let img = req.files.img;
     let body = req.body;
 
-    // //Object to insert
     let location = {
       location_type: body.location_type,
       location_name: body.location_name,
-      location_image: filename,
+      location_image: file.name,
+      img: file.data,
+      img_64: body.img_64,
     };
 
-    // // console.log(location);
+    //Check if location already exisits.
+    db.query(
+      `SELECT * FROM locations WHERE location_name LIKE "${req.body.location_name}"`,
+      (err, results) => {
+        if (err) throw err;
+        rows = JSON.parse(JSON.stringify(results));
+        if (rows.length > 0) {
+          return res.status(400).json({ error: "Already exists" });
+        } else {
+          let sql = `INSERT INTO locations SET ?`;
 
-    // // //Make query
-    let sql = `INSERT INTO locations SET ?`;
-
-    let reponse = {};
-
-    // // Open a connection and make a post request to the server.
-    db.query(sql, location, (error, result) => {
-      if (error) throw error;
-      response = JSON.parse(JSON.stringify(result));
-      return res.send(response);
-    });
-    // res.send(200);
+          // // Open a connection and make a post request to the server.
+          db.query(sql, location, (error, result) => {
+            if (error) throw error;
+            response = JSON.parse(JSON.stringify(result));
+            return res.send(response);
+          });
+        }
+      }
+    );
   }
 );
+
+router.get("/image/:id", (req, res, next) => {
+  let id = req.params.id;
+  db.query(
+    "SELECT locations.img_64 FROM locations WHERE location_id = ? ",
+    [id],
+    (err, result) => {
+      if (err) throw err;
+      row = JSON.parse(JSON.stringify(result))[0];
+
+      if (id == 41) {
+        // console.log(row.img_64);
+        // console.log(row.img.data);
+        // console.log(row);
+        // console.log(encoded.substring(0, 20));
+        // let blob = new Blob(row.img, { type: "image/jpeg" });
+        return res.send(row.img_64);
+      } else {
+        return res.send(200);
+      }
+    }
+  );
+});
 
 module.exports = router;
