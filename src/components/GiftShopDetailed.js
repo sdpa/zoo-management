@@ -199,7 +199,8 @@ const GiftShopDetailed = ({ match }) => {
             amount_due: 0,
           };
         });
-        setProducts(products);
+        let products2 = products.filter((product) => product.stock_amount > 10);
+        setProducts(products2);
         setLoading(false);
       })
       .catch((err) => {
