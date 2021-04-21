@@ -297,7 +297,7 @@ const GiftShopDetailed = ({ match }) => {
             <>
               <Typography>{`Products in ${giftShop.location_name} Enclosure`}</Typography>
 
-              {user.role == "Admin" ? (
+              {user.role == "Admin" || user.role == "Employee" ? (
                 <Grid item>
                   <Button variant="contained" onClick={openAddDialog}>
                     Add Item
@@ -318,7 +318,7 @@ const GiftShopDetailed = ({ match }) => {
                         <TableCell align="center">Select Quantity</TableCell>
                       ) : null}
 
-                      {user.role == "Customer" || user.role == "Admin" ? (
+                      {user.role == "Customer" || user.role == "Admin" || user.role == "Employee"? (
                         <TableCell align="center">Actions</TableCell>
                       ) : null}
                     </TableRow>
@@ -368,7 +368,7 @@ const GiftShopDetailed = ({ match }) => {
                             </Button>
                           </TableCell>
                         ) : null}
-                        {user.role == "Admin" ? (
+                        {user.role == "Admin" || user.role == "Employee" ? (
                           <TableCell align="right">
                             <Button
                               variant="outlined"
