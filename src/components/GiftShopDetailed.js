@@ -199,8 +199,14 @@ const GiftShopDetailed = ({ match }) => {
             amount_due: 0,
           };
         });
-        let products2 = products.filter((product) => product.stock_amount > 10);
-        setProducts(products2);
+        if (user.role == "Customer") {
+          let products2 = products.filter(
+            (product) => product.stock_amount > 10
+          );
+          setProducts(products2);
+        } else {
+          setProducts(products);
+        }
         setLoading(false);
       })
       .catch((err) => {
@@ -319,7 +325,9 @@ const GiftShopDetailed = ({ match }) => {
                         <TableCell align="center">Select Quantity</TableCell>
                       ) : null}
 
-                      {user.role == "Customer" || user.role == "Admin" || user.role == "Employee"? (
+                      {user.role == "Customer" ||
+                      user.role == "Admin" ||
+                      user.role == "Employee" ? (
                         <TableCell align="center">Actions</TableCell>
                       ) : null}
                     </TableRow>

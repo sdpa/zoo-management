@@ -121,17 +121,17 @@ const AdminRevenueSection = () => {
         <div className={classes.root} noValidate autoComplete="off">
           <div style={{ paddingTop: "10px" }}>
             <FormControl
-              variant="outlined"
               style={{
                 marginBottom: "20px",
                 width: "40%",
                 marginRight: "10px",
               }}>
               <InputLabel htmlFor="product-name">Product Name</InputLabel>
-              <OutlinedInput
+              <Input
                 id="product-name"
                 onChange={reportForm.handleChange}
                 name="product_name"
+                value={reportForm.values.product_name}
                 // label="product)name"
               />
             </FormControl>
@@ -141,15 +141,14 @@ const AdminRevenueSection = () => {
                 width: "40%",
                 marginRight: "10px",
               }}
-              className={clsx(classes.margin, classes.textField)}
-              variant="outlined">
-              <InputLabel id="shops">Shops</InputLabel>
+              className={clsx(classes.margin, classes.textField)}>
+              <InputLabel htmlFor="shop">Shops</InputLabel>
               <Select
                 // labelId="shops"
                 onChange={reportForm.handleChange}
                 name="shop"
+                value={reportForm.values.shop}
                 className={classes.select}>
-                <MenuItem> </MenuItem>
                 {shops.map((shop, index) => (
                   <MenuItem key={index} value={shop.location_id}>
                     {shop.location_name}
@@ -167,6 +166,7 @@ const AdminRevenueSection = () => {
                 labelId="from_date"
                 name="from_date"
                 type="date"
+                value={reportForm.values.from_date}
                 onChange={reportForm.handleChange}
               />
               <FormHelperText style={{ color: "red" }}>
@@ -181,6 +181,7 @@ const AdminRevenueSection = () => {
                 labelId="activity-to"
                 name="to_date"
                 type="date"
+                value={reportForm.values.to_date}
                 onChange={reportForm.handleChange}
               />
             </FormControl>
@@ -188,8 +189,14 @@ const AdminRevenueSection = () => {
           <Button
             variant="contained"
             onClick={reportForm.handleSubmit}
-            style={{ marginBottom: "10px" }}>
+            style={{ marginBottom: "10px", marginRight: "10px" }}>
             Get Report
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={reportForm.handleReset}
+            style={{ marginBottom: "10px" }}>
+            CLEAR
           </Button>
         </div>
       </form>

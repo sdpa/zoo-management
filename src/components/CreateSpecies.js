@@ -76,6 +76,8 @@ const CreateSpecies = (props) => {
         open={open}
         autoHideDuration={2000}
         onClose={() => {
+          setSuccessMessage("");
+          setErrMsg("");
           setOpen(false);
         }}>
         <div>

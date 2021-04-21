@@ -136,6 +136,13 @@ const EmployeeDashboard = () => {
     if (!values.species) {
       errors.species = "Required";
     }
+    if (
+      values.birth_date &&
+      values.date_arrived &&
+      values.birth_date > values.date_arrived
+    ) {
+      errors.date_arrived = "Date Arrived Cannot be before Date of Birth";
+    }
     return errors;
   };
 
@@ -365,27 +372,19 @@ const EmployeeDashboard = () => {
           </div>
           <div>
             <FormControl
-              spacing={2}
-              style={{ marginBottom: "20px", width: "40%" }}
-              className={clsx(classy.margin, classy.textField)}
-              variant="outlined"></FormControl>
-          </div>
-          <div>
-            <FormControl
               style={{
                 marginBottom: "20px",
                 width: "40%",
                 marginRight: "10px",
               }}
-              className={clsx(classy.margin, classy.textField)}
-              variant="outlined">
-              <InputLabel id="species">Species</InputLabel>
+              className={clsx(classy.margin, classy.textField)}>
+              <InputLabel htmlFor="species">Species</InputLabel>
               <Select
                 labelId="species"
                 onChange={reportForm.handleChange}
                 name="species"
+                value={reportForm.values.species}
                 className={classes.select}>
-                <MenuItem>None</MenuItem>
                 {species.map((s, index) => (
                   <MenuItem key={index} value={s.species_id}>
                     {s.species_name}
@@ -395,15 +394,14 @@ const EmployeeDashboard = () => {
             </FormControl>
             <FormControl
               style={{ marginBottom: "20px", width: "40%" }}
-              className={clsx(classy.margin, classy.textField)}
-              variant="outlined">
-              <InputLabel id="health_status">Health Status</InputLabel>
+              className={clsx(classy.margin, classy.textField)}>
+              <InputLabel htmlFor="health_status">Health Status</InputLabel>
               <Select
                 labelId="health_status"
                 onChange={reportForm.handleChange}
+                value={reportForm.values.health_status}
                 name="health_status"
                 className={classes.select}>
-                <MenuItem>None</MenuItem>
                 <MenuItem value="Healthy">Healthy</MenuItem>
                 <MenuItem value="Sick">Sick</MenuItem>
                 <MenuItem value="Deceased">Deceased</MenuItem>
@@ -418,6 +416,7 @@ const EmployeeDashboard = () => {
               labelId="activity-from"
               name="date_from"
               type="date"
+              value={reportForm.values.date_from}
               onChange={reportForm.handleChange}
             />
           </FormControl>
@@ -429,11 +428,18 @@ const EmployeeDashboard = () => {
               labelId="activity-to"
               name="date_to"
               type="date"
+              value={reportForm.values.date_to}
               onChange={reportForm.handleChange}
             />
           </FormControl>
-          <Button variant="contained" onClick={reportForm.handleSubmit}>
+          <Button
+            variant="contained"
+            onClick={reportForm.handleSubmit}
+            style={{ marginRight: "10px" }}>
             Get Report
+          </Button>
+          <Button variant="outlined" onClick={reportForm.handleReset}>
+            Clear
           </Button>
         </div>
       </form>

@@ -178,22 +178,16 @@ const UserDashboard = () => {
             className={clsx(classy.margin, classy.textField)}
             variant="outlined"></FormControl>
         </div>
-
-        <Typography
-          align="left"
-          style={{
-            fontSize: "18px",
-          }}>
-          Select atleast one item:{" "}
-        </Typography>
         <div>
-          <FormControl>
+          <FormControl style={{ paddingRight: "10px" }}>
             <InputLabel id="shop_name">Shop Name</InputLabel>
             <Select
               labelId="shop_name"
               onChange={reportForm.handleChange}
               name="shop_name"
               error={reportForm.errors.shop_name}
+              value={reportForm.values.shop_name}
+              displayEmpty
               className={classes.select}>
               {shops.map((s, index) => (
                 <MenuItem key={index} value={s.location_id}>
@@ -216,6 +210,7 @@ const UserDashboard = () => {
               id="amount_spent"
               onChange={reportForm.handleChange}
               name="amount_spent"
+              value={reportForm.values.amount_spent}
               error={reportForm.errors.amount_spent}
             />
             <FormHelperText style={{ color: "red" }}>
@@ -232,6 +227,7 @@ const UserDashboard = () => {
             labelId="activity-from"
             name="date_from"
             type="date"
+            value={reportForm.values.date_from}
             onChange={reportForm.handleChange}
           />
           <FormHelperText style={{ color: "red" }}>
@@ -246,11 +242,18 @@ const UserDashboard = () => {
             labelId="activity-to"
             name="date_to"
             type="date"
+            value={reportForm.values.date_to}
             onChange={reportForm.handleChange}
           />
         </FormControl>
-        <Button variant="contained" onClick={reportForm.handleSubmit}>
+        <Button
+          variant="contained"
+          onClick={reportForm.handleSubmit}
+          style={{ marginRight: "10px" }}>
           Get Report
+        </Button>
+        <Button onClick={reportForm.handleReset} variant="outlined">
+          Clear
         </Button>
       </div>
 
