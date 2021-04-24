@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+var bcrypt = require("bcrypt");
 const db = require("../database");
 
 //Get all employees
@@ -59,6 +60,53 @@ router.delete("/delete/:id", (req, res, next) => {
       //update the users table to make the user account not active
     }
   );
+});
+
+//Get employee by id.
+router.get("/:id", (req, res, next) => {
+  let id = req.params.id;
+  db.query(
+    `SELECT employee.*, users.full_name, locations.location_name  FROM users, employee, locations  WHERE employee.user_id = users.user_id AND locations.location_id = employee.work_location AND employee.is_active = true AND employee.user_id = ${id}`,
+    (err, results) => {
+      if (err) throw err;
+      result = JSON.parse(JSON.stringify(results));
+      return res.send(result);
+    }
+  );
+});
+
+//Change Password of emplyoee.
+router.post("/change_password", (req, res, next) => {
+  //Check if current passwor matches.
+  let current_pass = req.body.current_password;
+  let new_pass = req.body.new_password;
+  let id = req.body.user_id;
+  console.log(req.body);
+
+  db.query(`SELECT * FROM users WHERE users.user_id = ${id}`, (err, result) => {
+    if (err) throw err;
+    let user = JSON.parse(JSON.stringify(result))[0];
+    console.log(user);
+    let hash = user.pswd;
+    bcrypt.compare(current_pass, hash, async (err, response) => {
+      if (response == true) {
+        //Update the new password.
+        const hashedPassword = await bcrypt.hash(new_pass, 10);
+        db.query(
+          "UPDATE users SET ? WHERE users.user_id = ? ",
+          [{ pswd: hashedPassword }, user.user_id],
+          (err, results) => {
+            if (err) throw err;
+            console.log(results);
+            console.log("Password changed!!");
+            return res.sendStatus(200);
+          }
+        );
+      } else {
+        return res.status(400).json({ error: "Incorrect Current Password" });
+      }
+    });
+  });
 });
 
 module.exports = router;
